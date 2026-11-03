@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MOD1 – Word Search: Workplace Environment</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#0D47A1,#1565C0,#1976D2);min-height:100vh;overflow:hidden;display:flex;justify-content:center;align-items:center}
+.container{background:#fff;width:800px;height:550px;display:flex;flex-direction:column;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.header{background:linear-gradient(135deg,#0D47A1,#1565C0);color:#fff;padding:10px 18px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.header h1{font-size:15px;font-weight:700}.header p{font-size:11px;opacity:.8;margin-top:1px}
+button{padding:6px 12px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;transition:all .2s}
+.btn-white{background:#fff;color:#0D47A1}.btn-white:hover{background:#E3F2FD}
+.btn-outline{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4)}.btn-outline:hover{background:rgba(255,255,255,.25)}
+.btn-group{display:flex;gap:8px}
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.hidden{display:none!important}
+/* INTRO */
+.instr{padding:18px 24px;overflow-y:auto;flex:1}
+.instr h2{color:#0D47A1;font-size:20px;margin-bottom:20px}
+.instr p,.instr li{font-size:16px;line-height:1.6;color:#444;margin-bottom:5px}
+.instr ul{margin-left:18px;margin-bottom:10px}
+.concepts-preview{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.prev-item{background:#E3F2FD;border-radius:6px;padding:6px 10px;font-size:12px;color:#0D47A1;font-weight:600}
+.start-btn{background:linear-gradient(135deg,#0D47A1,#1565C0);color:#fff;padding:11px 32px;font-size:14px;border-radius:8px;display:block;margin:14px auto 0;cursor:pointer;border:none;font-weight:600}
+.start-btn:hover{transform:translateY(-2px)}
+/* GAME */
+.status-bar{display:flex;align-items:center;gap:16px;padding:6px 14px;background:#f5f5f5;border-bottom:1px solid #e0e0e0;flex-shrink:0;font-size:12px;color:#555}
+.found-badge{background:#0D47A1;color:#fff;border-radius:20px;padding:2px 12px;font-size:12px;font-weight:700}
+.game-area{flex:1;display:flex;gap:0;overflow:hidden;min-height:0;position:relative}
+.grid-wrap{flex:1.4;padding:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden}
+.grid-table{border-collapse:collapse;user-select:none}
+.grid-table td{width:26px;height:26px;text-align:center;vertical-align:middle;font-size:13px;font-weight:700;color:#333;cursor:pointer;border-radius:3px;transition:background .1s}
+.grid-table td:hover{background:#E3F2FD}
+.grid-table td.selecting{background:#90CAF9;color:#fff}
+.grid-table td.found-0{background:#0D47A1;color:#fff}
+.grid-table td.found-1{background:#1565C0;color:#fff}
+.grid-table td.found-2{background:#1976D2;color:#fff}
+.grid-table td.found-3{background:#1E88E5;color:#fff}
+.grid-table td.found-4{background:#2196F3;color:#fff}
+.word-panel{width:200px;flex-shrink:0;padding:10px 12px;border-left:1px solid #e0e0e0;background:#fafafa;display:flex;flex-direction:column;gap:6px;overflow-y:auto}
+.word-panel h2{font-size:14px;font-weight:700;color:#0D47A1;flex-shrink:0}
+.word-list{display:flex;flex-direction:column;gap:3px;flex:1}
+.word-item{background:#fff;border:2px solid #BBDEFB;border-radius:6px;padding:4px 8px;font-size:10px;font-weight:700;color:#555;transition:all .3s;display:flex;align-items:center;gap:5px}
+.word-item.found-word{border-color:#0D47A1;background:#E3F2FD;color:#0D47A1;text-decoration:line-through;opacity:.7}
+.hint-box{background:#E3F2FD;border-left:3px solid #1565C0;border-radius:5px;padding:6px 8px;font-size:10px;color:#0D47A1;line-height:1.5;flex-shrink:0}
+.win-overlay{position:absolute;inset:0;background:rgba(13,71,161,.93);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;z-index:400;animation:fadeIn .4s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.win-overlay h2{color:#fff;font-size:22px;font-weight:700}
+.win-overlay p{color:#BBDEFB;font-size:13px;text-align:center;max-width:320px;line-height:1.5}
+.win-stats{display:flex;gap:10px}
+.win-stat{background:rgba(255,255,255,.15);border-radius:8px;padding:8px 16px;color:#fff;font-size:13px;font-weight:700;text-align:center}
+.win-stat span{display:block;font-size:10px;opacity:.8;margin-bottom:2px}
+.btn-win{background:#fff;color:#0D47A1;padding:9px 24px;font-size:13px;border-radius:8px;font-weight:700;margin-top:4px;cursor:pointer;border:none}
+/* RESULT */
+.result-page{flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div><h1>🔍 Word Search – Workplace Environment</h1><p>Module 1 – Workplace Environment and Physical Comfort</p></div>
+    <div class="btn-group">
+      <button class="btn-outline" onclick="resetGame()">🔄 Play Again</button>
+      <button class="btn-white" onclick="window.close()">Back to Course</button>
+    </div>
+  </div>
+  <div class="content">
+    <!-- INTRO -->
+    <div id="instrPage" class="instr">
+      <h2>🎯 How to Play</h2>
+      <p>Hidden in the grid are <strong>10 key terms</strong> about workplace environment and physical comfort. Find them all by clicking on the first letter and dragging to the last.</p>
+      <div class="concepts-preview">
+        <div class="prev-item">🏢 HAZARD</div>
+        <div class="prev-item">🛡️ SAFETY</div>
+        <div class="prev-item">🔊 NOISE</div>
+        <div class="prev-item">💡 LIGHT</div>
+        <div class="prev-item">☀️ GLARE</div>
+        <div class="prev-item">🌬️ AIRFLOW</div>
+        <div class="prev-item">🪑 COMFORT</div>
+        <div class="prev-item">🌡️ CLIMATE</div>
+        <div class="prev-item">❤️ WELFARE</div>
+        <div class="prev-item">📐 SPACE</div>
+      </div>
+      <ul>
+        <li>Words can go horizontal, vertical or diagonal — in either direction</li>
+        <li>Click and drag from the first letter to the last letter of each word</li>
+        <li>Find all 10 words to complete the challenge</li>
+      </ul>
+      <button class="start-btn" onclick="startGame()">▶ Start</button>
+    </div>
+
+    <!-- GAME -->
+    <div id="gamePage" class="hidden">
+      <div class="status-bar">
+        <span class="found-badge">Found: <span id="foundCount">0</span>/10</span>
+        <span style="font-size:11px;color:#888">Click on the first letter and drag to the last</span>
+      </div>
+      <div class="game-area">
+        <div class="grid-wrap"><table class="grid-table" id="gridTable"></table></div>
+        <div class="word-panel">
+          <h2>🔍 Words to Find</h2>
+          <div class="word-list" id="wordList"></div>
+          <div class="hint-box">💡 Horizontal, vertical or diagonal — in both directions.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULT -->
+    <div id="resultPage" class="result-page hidden">
+      <div style="text-align:center;max-width:480px">
+        <div style="font-size:55px;margin-bottom:12px" id="resultIcon"></div>
+        <h2 style="font-size:20px;font-weight:700;color:#0D47A1;margin-bottom:8px" id="resultTitle"></h2>
+        <p style="font-size:13px;color:#555;line-height:1.6;margin-bottom:15px" id="resultText"></p>
+        <div style="display:flex;gap:10px;justify-content:center">
+          <button style="background:linear-gradient(135deg,#0D47A1,#1565C0);color:#fff;padding:10px 24px;font-size:13px;border-radius:8px;cursor:pointer;border:none;font-weight:600" onclick="resetGame()">🔄 Play Again</button>
+          <button style="background:#78909c;color:#fff;padding:10px 24px;font-size:13px;border-radius:8px;cursor:pointer;border:none;font-weight:600" onclick="window.close()">Back to Course</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const WORDS=[
+  {word:'HAZARD',icon:'🏢'},
+  {word:'SAFETY',icon:'🛡️'},
+  {word:'NOISE',icon:'🔊'},
+  {word:'LIGHT',icon:'💡'},
+  {word:'GLARE',icon:'☀️'},
+  {word:'AIRFLOW',icon:'🌬️'},
+  {word:'COMFORT',icon:'🪑'},
+  {word:'CLIMATE',icon:'🌡️'},
+  {word:'WELFARE',icon:'❤️'},
+  {word:'SPACE',icon:'📐'},
+];
+const SIZE=15;
+let grid=[],placedWords=[],foundWords=[],selecting=false,startCell=null,currentCells=[];
+
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}}
+
+function buildGrid(){
+  grid=Array.from({length:SIZE},()=>Array(SIZE).fill(''));
+  placedWords=[];
+  const dirs=[[0,1],[1,0],[1,1],[-1,1],[0,-1],[-1,0],[-1,-1],[1,-1]];
+  const sortedWords=[...WORDS].sort((a,b)=>b.word.length-a.word.length);
+  for(const {word} of sortedWords){
+    let ok=false;
+    for(let att=0;att<300&&!ok;att++){
+      const dir=dirs[Math.floor(Math.random()*dirs.length)];
+      const r=Math.floor(Math.random()*SIZE),c=Math.floor(Math.random()*SIZE);
+      const cells=[];let valid=true;
+      for(let i=0;i<word.length;i++){
+        const nr=r+dir[0]*i,nc=c+dir[1]*i;
+        if(nr<0||nr>=SIZE||nc<0||nc>=SIZE){valid=false;break;}
+        if(grid[nr][nc]!==''&&grid[nr][nc]!==word[i]){valid=false;break;}
+        cells.push([nr,nc]);
+      }
+      if(valid){cells.forEach(([nr,nc],i)=>grid[nr][nc]=word[i]);placedWords.push({word,cells});ok=true;}
+    }
+  }
+  const L='ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  for(let r=0;r<SIZE;r++)for(let c=0;c<SIZE;c++)if(!grid[r][c])grid[r][c]=L[Math.floor(Math.random()*26)];
+}
+
+function renderGrid(){
+  const table=document.getElementById('gridTable');
+  table.innerHTML='';
+  for(let r=0;r<SIZE;r++){
+    const tr=document.createElement('tr');
+    for(let c=0;c<SIZE;c++){
+      const td=document.createElement('td');
+      td.textContent=grid[r][c];
+      td.dataset.r=r;td.dataset.c=c;
+      td.addEventListener('mousedown',onDown);
+      td.addEventListener('mouseenter',onEnter);
+      tr.appendChild(td);
+    }
+    table.appendChild(tr);
+  }
+  document.addEventListener('mouseup',onUp);
+}
+
+function renderWords(){
+  const list=document.getElementById('wordList');
+  list.innerHTML='';
+  WORDS.forEach(({word,icon})=>{
+    const d=document.createElement('div');
+    d.className='word-item'+(foundWords.includes(word)?' found-word':'');
+    d.id='wi-'+word;
+    d.innerHTML=`<span>${icon}</span><span>${word}</span>`;
+    list.appendChild(d);
+  });
+}
+
+function getCell(r,c){return document.querySelector(`td[data-r="${r}"][data-c="${c}"]`);}
+
+function onDown(e){
+  selecting=true;
+  startCell={r:+e.target.dataset.r,c:+e.target.dataset.c};
+  currentCells=[{...startCell}];
+  clearSel();
+  e.target.classList.add('selecting');
+  e.preventDefault();
+}
+
+function onEnter(e){
+  if(!selecting||!startCell)return;
+  const r=+e.target.dataset.r,c=+e.target.dataset.c;
+  const dr=r-startCell.r,dc=c-startCell.c;
+  const len=Math.max(Math.abs(dr),Math.abs(dc));
+  if(len===0)return;
+  if(Math.abs(dr)!==Math.abs(dc)&&dr!==0&&dc!==0)return;
+  const sr=dr===0?0:dr/Math.abs(dr),sc=dc===0?0:dc/Math.abs(dc);
+  clearSel();currentCells=[];
+  for(let i=0;i<=len;i++){
+    const nr=startCell.r+sr*i,nc=startCell.c+sc*i;
+    currentCells.push({r:nr,c:nc});
+    const cell=getCell(nr,nc);
+    if(cell&&!cell.className.includes('found-'))cell.classList.add('selecting');
+  }
+}
+
+function onUp(){
+  if(!selecting)return;
+  selecting=false;
+  const cellKey=c=>`${c.r},${c.c}`;
+  const selKey=currentCells.map(cellKey).join('|');
+  let matched=null;
+  for(const pw of placedWords){
+    if(foundWords.includes(pw.word))continue;
+    const fwd=pw.cells.map(([r,c])=>cellKey({r,c})).join('|');
+    const rev=pw.cells.map(([r,c])=>cellKey({r,c})).reverse().join('|');
+    if(selKey===fwd||selKey===rev){matched=pw;break;}
+  }
+  if(matched){
+    foundWords.push(matched.word);
+    document.getElementById('foundCount').textContent=foundWords.length;
+    const colorClass='found-'+(foundWords.length%5);
+    currentCells.forEach(({r,c})=>{
+      const cell=getCell(r,c);
+      if(cell){cell.classList.remove('selecting');cell.classList.add(colorClass);}
+    });
+    document.getElementById('wi-'+matched.word)?.classList.add('found-word');
+    if(foundWords.length===WORDS.length)setTimeout(showWin,400);
+  }else{clearSel();}
+  currentCells=[];startCell=null;
+}
+
+function clearSel(){document.querySelectorAll('.selecting').forEach(el=>el.classList.remove('selecting'));}
+
+function showWin(){
+  const area=document.querySelector('.game-area');
+  const win=document.createElement('div');
+  win.className='win-overlay';
+  win.innerHTML=`<div style="font-size:52px">🎉</div><h2>All Words Found!</h2><p>A safe workplace starts with understanding these essentials: proper lighting, noise control, good airflow, comfortable climate and well-managed spaces keep everyone healthy and productive.</p><div class="win-stats"><div class="win-stat"><span>Found</span>${foundWords.length}/10</div></div><button class="btn-win" onclick="resetGame()">🔄 Play Again</button>`;
+  area.appendChild(win);
+}
+
+function startGame(){
+  showPage('gamePage');
+  foundWords=[];
+  document.getElementById('foundCount').textContent='0';
+  buildGrid();renderGrid();renderWords();
+}
+
+function resetGame(){
+  document.querySelector('.win-overlay')?.remove();
+  showPage('instrPage');
+}
+
+function showPage(id){
+  ['instrPage','gamePage','resultPage'].forEach(p=>{
+    const el=document.getElementById(p);
+    el.classList.add('hidden');
+    el.style.display='';
+  });
+  const target=document.getElementById(id);
+  target.classList.remove('hidden');
+}
+</script>
+</body>
+</html>

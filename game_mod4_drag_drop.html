@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MOD4 – Sort It Out: Ergonomic Practices</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#004D40,#00695C,#00897B);min-height:100vh;overflow:hidden;display:flex;justify-content:center;align-items:center}
+.container{background:#fff;width:800px;height:550px;display:flex;flex-direction:column;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.header{background:linear-gradient(135deg,#004D40,#00695C);color:#fff;padding:10px 18px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.header h1{font-size:18px;font-weight:700}.header p{font-size:12px;opacity:.8;margin-top:1px}
+button{padding:6px 12px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;transition:all .2s}
+.btn-white{background:#fff;color:#004D40}.btn-white:hover{background:#E0F2F1}
+.btn-outline{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4)}.btn-outline:hover{background:rgba(255,255,255,.25)}
+.btn-group{display:flex;gap:8px}
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.hidden{display:none!important}
+/* INTRO */
+.instr{padding:18px 24px;overflow-y:auto;flex:1}
+.instr h2{color:#004D40;font-size:20px;margin-bottom:20px}
+.instr p,.instr li{font-size:16px;line-height:1.6;color:#444;margin-bottom:15px}
+.instr ul{margin-left:18px;margin-bottom:10px}
+.how-grid{display:flex;gap:10px;margin:10px 0}
+.how-step{flex:1;background:#E0F2F1;border-radius:8px;padding:10px;text-align:center;font-size:12px;color:#004D40;font-weight:600;line-height:1.5}
+.how-step .num{font-size:22px;display:block;margin-bottom:4px}
+.start-btn{background:linear-gradient(135deg,#004D40,#00695C);color:#fff;padding:11px 32px;font-size:14px;border-radius:8px;display:block;margin:14px auto 0;cursor:pointer;border:none;font-weight:600}
+.start-btn:hover{transform:translateY(-2px)}
+/* GAME */
+.game-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:8px 14px;gap:6px}
+.status-row{display:flex;align-items:center;gap:12px;flex-shrink:0;font-size:12px;color:#555}
+.stat-badge{background:#00695C;color:#fff;border-radius:20px;padding:2px 12px;font-size:12px;font-weight:700}
+.game-body{flex:1;display:flex;gap:10px;overflow:hidden;min-height:0}
+.source-col{width:260px;flex-shrink:0;display:flex;flex-direction:column;gap:5px;overflow-y:auto;padding-right:4px}
+.source-col h3{font-size:14px;color:#004D40;font-weight:700;margin-bottom:2px;flex-shrink:0}
+.drag-item{background:#fff;border:2px solid #B2DFDB;border-radius:8px;padding:7px 10px;font-size:14px;color:#333;cursor:grab;transition:all .2s;line-height:1.4;user-select:none}
+.drag-item:hover{border-color:#00695C;background:#E0F2F1}
+.drag-item.dragging{opacity:.4}
+.drag-item.placed{display:none}
+.targets{flex:1;display:flex;gap:10px}
+.target-zone{flex:1;border:2px dashed #B2DFDB;border-radius:10px;padding:8px;display:flex;flex-direction:column;gap:4px;overflow-y:auto;transition:all .2s;min-height:0}
+.target-zone.drag-over{border-color:#00695C;background:#E0F2F1}
+.target-zone h3{font-size:12px;font-weight:700;text-align:center;padding:4px;border-radius:6px;flex-shrink:0}
+.zone-correct h3{color:#1B5E20;background:#C8E6C9}
+.zone-wrong h3{color:#B71C1C;background:#FFCDD2}
+.dropped-item{border-radius:6px;padding:5px 8px;font-size:10px;line-height:1.4;display:flex;align-items:center;gap:4px;font-weight:600}
+.dropped-item.is-right{background:#C8E6C9;color:#1B5E20;border:1px solid #81C784}
+.dropped-item.is-wrong{background:#FFCDD2;color:#B71C1C;border:1px solid #E57373}
+.check-btn{background:linear-gradient(135deg,#004D40,#00695C);color:#fff;padding:9px 24px;font-size:13px;border-radius:8px;cursor:pointer;border:none;font-weight:600;align-self:center;margin-top:2px}
+.check-btn:hover{transform:translateY(-1px)}
+.check-btn:disabled{opacity:.5;cursor:default;transform:none}
+/* RESULT */
+.result-page{flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div><h1>🖥️ Sort It Out – Ergonomic Practices</h1><p>Module 4 – Display Screen Equipment and Ergonomics</p></div>
+    <div class="btn-group">
+      <button class="btn-outline" onclick="resetGame()">🔄 Play Again</button>
+      <button class="btn-white" onclick="window.close()">Back to Course</button>
+    </div>
+  </div>
+  <div class="content">
+    <!-- INTRO -->
+    <div id="instrPage" class="instr">
+      <h2>🎯 How to Play</h2>
+      <p>Drag each statement into the correct category: <strong>CORRECT Practice</strong> or <strong>INCORRECT Practice</strong>.</p>
+      <div class="how-grid">
+        <div class="how-step"><span class="num">👆</span>Drag a card from the left</div>
+        <div class="how-step"><span class="num">📥</span>Drop it into the right zone</div>
+        <div class="how-step"><span class="num">✅</span>Check your answers</div>
+      </div>
+      <ul>
+        <li>Sort all 10 statements, then click "Check Answers"</li>
+        <li>Green border = correctly placed, red border = misplaced</li>
+      </ul>
+      <button class="start-btn" onclick="startGame()">▶ Start</button>
+    </div>
+
+    <!-- GAME -->
+    <div id="gamePage" class="game-wrap hidden">
+      <div class="status-row">
+        <span class="stat-badge">Placed: <span id="placedCount">0</span>/10</span>
+        <span style="font-size:11px;color:#888">Drag each statement into the correct zone</span>
+      </div>
+      <div class="game-body">
+        <div class="source-col" id="sourceCol">
+          <h3>📋 Statements</h3>
+        </div>
+        <div class="targets">
+          <div class="target-zone zone-correct" id="zoneCorrect" ondragover="allowDrop(event)" ondrop="dropItem(event,'correct')">
+            <h3>✅ CORRECT Practice</h3>
+          </div>
+          <div class="target-zone zone-wrong" id="zoneWrong" ondragover="allowDrop(event)" ondrop="dropItem(event,'incorrect')">
+            <h3>❌ INCORRECT Practice</h3>
+          </div>
+        </div>
+      </div>
+      <button class="check-btn" id="checkBtn" onclick="checkAnswers()" disabled>Check Answers</button>
+    </div>
+
+    <!-- RESULT -->
+    <div id="resultPage" class="result-page hidden">
+      <div style="text-align:center;max-width:480px">
+        <div style="font-size:55px;margin-bottom:12px" id="resultIcon"></div>
+        <h2 style="font-size:20px;font-weight:700;color:#004D40;margin-bottom:8px" id="resultTitle"></h2>
+        <p style="font-size:13px;color:#555;line-height:1.6;margin-bottom:15px" id="resultText"></p>
+        <div style="background:#E0F2F1;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:700;color:#00695C;margin-bottom:15px;display:inline-block" id="resultScore"></div>
+        <div style="display:flex;gap:10px;justify-content:center">
+          <button style="background:linear-gradient(135deg,#004D40,#00695C);color:#fff;padding:10px 24px;font-size:13px;border-radius:8px;cursor:pointer;border:none;font-weight:600" onclick="resetGame()">🔄 Play Again</button>
+          <button style="background:#78909c;color:#fff;padding:10px 24px;font-size:13px;border-radius:8px;cursor:pointer;border:none;font-weight:600" onclick="window.close()">Back to Course</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const ITEMS=[
+  {id:0,text:'Position the top of the monitor at or slightly below eye level',cat:'correct'},
+  {id:1,text:'Keep both feet flat on the floor or on a footrest',cat:'correct'},
+  {id:2,text:'Take a short break from the screen every 20-30 minutes',cat:'correct'},
+  {id:3,text:'Adjust your chair so your thighs are parallel to the floor',cat:'correct'},
+  {id:4,text:'Place the keyboard so your wrists rest flat on the desk while typing',cat:'incorrect'},
+  {id:5,text:'Position the monitor directly beside a window to get more light',cat:'incorrect'},
+  {id:6,text:'Sit with your legs crossed under the desk for long periods',cat:'incorrect'},
+  {id:7,text:'Keep frequently used items within easy arm reach',cat:'correct'},
+  {id:8,text:'Tilt the monitor upward so the screen reflects the ceiling lights',cat:'incorrect'},
+  {id:9,text:'Skip breaks because you feel fine and are not tired',cat:'incorrect'},
+];
+
+let placed={},order=[];
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+
+function startGame(){
+  placed={};
+  order=[...ITEMS];shuffle(order);
+  document.getElementById('placedCount').textContent='0';
+  document.getElementById('checkBtn').disabled=true;
+  renderSource();
+  clearZones();
+  showPage('gamePage');
+}
+
+function renderSource(){
+  const col=document.getElementById('sourceCol');
+  col.innerHTML='<h3>📋 Statements</h3>';
+  order.forEach(item=>{
+    if(placed[item.id])return;
+    const d=document.createElement('div');
+    d.className='drag-item';
+    d.draggable=true;
+    d.dataset.id=item.id;
+    d.textContent=item.text;
+    d.addEventListener('dragstart',e=>{e.dataTransfer.setData('text/plain',item.id);d.classList.add('dragging');});
+    d.addEventListener('dragend',()=>d.classList.remove('dragging'));
+    col.appendChild(d);
+  });
+}
+
+function clearZones(){
+  ['zoneCorrect','zoneWrong'].forEach(zid=>{
+    const z=document.getElementById(zid);
+    z.querySelectorAll('.dropped-item').forEach(el=>el.remove());
+  });
+}
+
+function allowDrop(e){e.preventDefault();e.currentTarget.classList.add('drag-over');}
+document.addEventListener('dragover',e=>{document.querySelectorAll('.drag-over').forEach(el=>el.classList.remove('drag-over'));});
+
+function dropItem(e,zone){
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  const id=+e.dataTransfer.getData('text/plain');
+  const item=ITEMS.find(i=>i.id===id);
+  if(!item||placed[id])return;
+  placed[id]=zone;
+  // Add to zone
+  const d=document.createElement('div');
+  d.className='dropped-item';
+  d.style.background='#F5F5F5';d.style.color='#333';d.style.border='1px solid #ccc';
+  d.textContent=item.text;
+  d.dataset.id=id;
+  e.currentTarget.appendChild(d);
+  // Hide source
+  const src=document.querySelector(`.drag-item[data-id="${id}"]`);
+  if(src)src.classList.add('placed');
+  const count=Object.keys(placed).length;
+  document.getElementById('placedCount').textContent=count;
+  if(count===ITEMS.length)document.getElementById('checkBtn').disabled=false;
+}
+
+function checkAnswers(){
+  let score=0;
+  ITEMS.forEach(item=>{
+    const userZone=placed[item.id];
+    const correct=userZone===item.cat;
+    if(correct)score++;
+    const el=document.querySelector(`.dropped-item[data-id="${item.id}"]`);
+    if(el){
+      el.className='dropped-item '+(correct?'is-right':'is-wrong');
+      el.innerHTML=(correct?'✅ ':'❌ ')+item.text;
+    }
+  });
+  document.getElementById('checkBtn').disabled=true;
+  setTimeout(()=>showResultPage(score),1500);
+}
+
+function showResultPage(score){
+  const pct=Math.round(score/ITEMS.length*100);
+  const icon=pct>=80?'🏆':pct>=50?'👍':'💪';
+  const title=pct>=80?'Ergonomics expert!':pct>=50?'Good awareness!':'Keep learning!';
+  document.getElementById('resultIcon').textContent=icon;
+  document.getElementById('resultTitle').textContent=title;
+  document.getElementById('resultText').textContent='Good ergonomic habits prevent musculoskeletal problems, eye strain and fatigue. Correct monitor height, proper posture, regular breaks and a well-organised desk are the foundations of a healthy workstation.';
+  document.getElementById('resultScore').textContent='Score: '+score+'/'+ITEMS.length+' ('+pct+'%)';
+  showPage('resultPage');
+}
+
+function resetGame(){showPage('instrPage');}
+
+function showPage(id){
+  ['instrPage','gamePage','resultPage'].forEach(p=>{
+    const el=document.getElementById(p);
+    el.classList.add('hidden');el.style.display='';
+  });
+  const target=document.getElementById(id);
+  target.classList.remove('hidden');
+  if(id==='gamePage')target.style.display='flex';
+  if(id==='resultPage')target.style.display='flex';
+}
+</script>
+</body>
+</html>

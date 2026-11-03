@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MOD2 – True or False: Slips, Trips and Falls</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#B71C1C,#C62828,#D32F2F);min-height:100vh;overflow:hidden;display:flex;justify-content:center;align-items:center}
+.container{background:#fff;width:800px;height:550px;display:flex;flex-direction:column;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.header{background:linear-gradient(135deg,#B71C1C,#C62828);color:#fff;padding:10px 18px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.header h1{font-size:16px;font-weight:700}.header p{font-size:11px;opacity:.8;margin-top:1px}
+button{padding:6px 12px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;transition:all .2s}
+.btn-white{background:#fff;color:#B71C1C}.btn-white:hover{background:#FFEBEE}
+.btn-outline{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4)}.btn-outline:hover{background:rgba(255,255,255,.25)}
+.btn-group{display:flex;gap:8px}
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.hidden{display:none!important}
+/* INTRO */
+.instr{padding:18px 24px;overflow-y:auto;flex:1}
+.instr h2{color:#B71C1C;font-size:20px;margin-bottom:20px}
+.instr p,.instr li{font-size:16px;line-height:1.6;color:#444;margin-bottom:5px}
+.instr ul{margin-left:18px;margin-bottom:10px}
+.how-grid{display:flex;gap:10px;margin:10px 0}
+.how-step{flex:1;background:#FFEBEE;border-radius:8px;padding:10px;text-align:center;font-size:12px;color:#B71C1C;font-weight:600;line-height:1.5}
+.how-step .num{font-size:22px;display:block;margin-bottom:4px}
+.start-btn{background:linear-gradient(135deg,#B71C1C,#C62828);color:#fff;padding:11px 32px;font-size:14px;border-radius:8px;display:block;margin:14px auto 0;cursor:pointer;border:none;font-weight:600}
+.start-btn:hover{transform:translateY(-2px)}
+/* GAME */
+.game-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:12px 20px;gap:8px}
+.status-row{display:flex;align-items:center;gap:12px;flex-shrink:0;font-size:24px;color:#555}
+.stat-badge{background:#C62828;color:#fff;border-radius:20px;padding:2px 12px;font-size:16px;font-weight:700}
+.progress-bar{flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#C62828,#E53935);border-radius:3px;transition:width .3s}
+.score-badge{background:#2E7D32;color:#fff;border-radius:20px;padding:2px 12px;font-size:16px;font-weight:700}
+.topic-tag{background:#FFEBEE;color:#C62828;border-radius:12px;padding:3px 10px;font-size:14px;font-weight:600;margin-bottom:4px;display:inline-block}
+.stmt-card{background:#FAFAFA;border:2px solid #eee;border-radius:10px;padding:16px 20px;font-size:16px;color:#333;line-height:1.6;min-height:85px;display:flex;align-items:center}
+.btn-row{display:flex;gap:12px;justify-content:center;margin-top:6px}
+.btn-true,.btn-false{padding:10px 0;width:130px;font-size:14px;font-weight:700;border-radius:8px;border:none;cursor:pointer;transition:all .2s}
+.btn-true{background:#2E7D32;color:#fff}.btn-true:hover{background:#1B5E20}
+.btn-false{background:#C62828;color:#fff}.btn-false:hover{background:#B71C1C}
+.btn-true:disabled,.btn-false:disabled{opacity:.5;cursor:default;transform:none}
+.fb-box{border-radius:8px;padding:10px 14px;font-size:16px;line-height:1.6;margin-top:4px;min-height:40px;display:flex;align-items:center;gap:8px}
+.fb-correct{background:#E8F5E9;border-left:4px solid #2E7D32;color:#1B5E20}
+.fb-wrong{background:#FFEBEE;border-left:4px solid #C62828;color:#B71C1C}
+.fb-icon{font-size:20px;flex-shrink:0}
+.next-btn{background:linear-gradient(135deg,#B71C1C,#C62828);color:#fff;padding:8px 22px;font-size:12px;border-radius:6px;cursor:pointer;border:none;font-weight:600;align-self:center;margin-top:4px}
+.next-btn:hover{transform:translateY(-1px)}
+/* RESULT */
+.result-page{flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div><h1>✅ True or False – Slips, Trips and Falls</h1><p>Module 2 – Slips, Trips, Falls and Mechanical Risks</p></div>
+    <div class="btn-group">
+      <button class="btn-outline" onclick="resetGame()">🔄 Play Again</button>
+      <button class="btn-white" onclick="window.close()">Back to Course</button>
+    </div>
+  </div>
+  <div class="content">
+    <!-- INTRO -->
+    <div id="instrPage" class="instr">
+      <h2>🎯 How to Play</h2>
+      <p>You will be shown <strong>10 statements</strong> about slips, trips and falls in the workplace. Decide whether each one is <strong>TRUE</strong> or <strong>FALSE</strong>.</p>
+      <div class="how-grid">
+        <div class="how-step"><span class="num">📖</span>Read the statement carefully</div>
+        <div class="how-step"><span class="num">✅❌</span>Click TRUE or FALSE</div>
+        <div class="how-step"><span class="num">💡</span>Read the feedback and learn</div>
+      </div>
+      <ul>
+        <li>Each correct answer scores a point — aim for 10/10!</li>
+        <li>Immediate feedback explains why the answer is true or false</li>
+      </ul>
+      <button class="start-btn" onclick="startGame()">▶ Start</button>
+    </div>
+
+    <!-- GAME -->
+    <div id="gamePage" class="game-wrap hidden">
+      <div class="status-row">
+        <span class="stat-badge">Question: <span id="qNum">1</span>/10</span>
+        <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:10%"></div></div>
+        <span class="score-badge">Score: <span id="scoreVal">0</span>/10</span>
+      </div>
+      <div id="topicTag" class="topic-tag"></div>
+      <div class="stmt-card" id="stmtCard"></div>
+      <div class="btn-row">
+        <button class="btn-true" id="btnTrue" onclick="answer(true)">✅ TRUE</button>
+        <button class="btn-false" id="btnFalse" onclick="answer(false)">❌ FALSE</button>
+      </div>
+      <div class="fb-box hidden" id="fbBox"></div>
+      <button class="next-btn hidden" id="nextBtn" onclick="nextQ()">Next ▶</button>
+    </div>
+
+    <!-- RESULT -->
+    <div id="resultPage" class="result-page hidden">
+      <div style="text-align:center;max-width:480px">
+        <div style="font-size:55px;margin-bottom:12px" id="resultIcon"></div>
+        <h2 style="font-size:20px;font-weight:700;color:#B71C1C;margin-bottom:8px" id="resultTitle"></h2>
+        <p style="font-size:13px;color:#555;line-height:1.6;margin-bottom:15px" id="resultText"></p>
+        <div style="background:#FFEBEE;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:700;color:#C62828;margin-bottom:15px;display:inline-block" id="resultScore"></div>
+        <div style="display:flex;gap:10px;justify-content:center">
+          <button style="background:linear-gradient(135deg,#B71C1C,#C62828);color:#fff;padding:10px 24px;font-size:13px;border-radius:8px;cursor:pointer;border:none;font-weight:600" onclick="resetGame()">🔄 Play Again</button>
+          <button style="background:#78909c;color:#fff;padding:10px 24px;font-size:13px;border-radius:8px;cursor:pointer;border:none;font-weight:600" onclick="window.close()">Back to Course</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const QS=[
+  {topic:'Wet Floors',stmt:'You should always place a "wet floor" sign before mopping an area, even if you plan to finish quickly.',ans:true,fb:'A wet floor is dangerous even for a few seconds. Someone could walk through the area at any moment, so the warning sign must always go up first.'},
+  {topic:'Footwear',stmt:'Wearing open-toed sandals is acceptable in the workplace as long as you are careful where you step.',ans:false,fb:'Open-toed footwear provides no protection against slips or falling objects. Closed, non-slip shoes are the minimum requirement in most workplaces.'},
+  {topic:'Stairways',stmt:'Carrying a large box that blocks your view while going down stairs is safe if you hold the handrail with one hand.',ans:false,fb:'If the load blocks your view, you cannot see the steps. You should make two trips, use a lift, or ask a colleague to help carry the load.'},
+  {topic:'Cables',stmt:'Trailing cables across a walkway are a trip hazard and should be covered, re-routed or taped down.',ans:true,fb:'Loose cables on the floor are one of the most common trip hazards. They must be secured with cable covers, routed along walls, or taped down flat.'},
+  {topic:'Spills',stmt:'If you notice a spill on the floor but it is not in your work area, it is not your responsibility to act.',ans:false,fb:'Every worker has a duty to act on hazards they notice. You should clean it up if you can, or immediately report it and warn others nearby.'},
+  {topic:'Lighting',stmt:'Poor lighting in corridors and stairwells increases the risk of trips and falls.',ans:true,fb:'When you cannot clearly see the floor, steps or obstacles, you are far more likely to trip. Adequate lighting is essential in all circulation areas.'},
+  {topic:'Housekeeping',stmt:'Keeping walkways and work areas clear of clutter is one of the most effective ways to prevent trips.',ans:true,fb:'Good housekeeping is the first line of defence against trips. Tools, materials and waste should be stored properly, never left in walkways.'},
+  {topic:'Ladders',stmt:'A stepladder can safely replace a proper scaffold for extended work at height above two metres.',ans:false,fb:'Stepladders are designed for brief, light tasks at low height. For extended work or heights above two metres, a proper scaffold or platform with guardrails is required.'},
+  {topic:'Weather',stmt:'In winter, outdoor walkways should be checked and treated for ice before the start of each shift.',ans:true,fb:'Ice and frost are major slip hazards. Outdoor paths, ramps and parking areas should be gritted or salted and checked regularly during cold weather.'},
+  {topic:'Reporting',stmt:'Near-miss slip or trip incidents do not need to be reported because no injury occurred.',ans:false,fb:'Near-misses are warning signs. Reporting them helps identify hazards before someone gets hurt. Every near-miss should be recorded and investigated.'},
+];
+
+let order=[],idx=0,score=0,answered=false;
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+
+function startGame(){
+  order=[...Array(QS.length).keys()];shuffle(order);
+  idx=0;score=0;answered=false;
+  document.getElementById('scoreVal').textContent='0';
+  showPage('gamePage');
+  showQ();
+}
+
+function showQ(){
+  const q=QS[order[idx]];
+  document.getElementById('qNum').textContent=idx+1;
+  document.getElementById('progFill').style.width=((idx+1)/QS.length*100)+'%';
+  document.getElementById('topicTag').textContent=q.topic;
+  document.getElementById('stmtCard').textContent=q.stmt;
+  document.getElementById('btnTrue').disabled=false;
+  document.getElementById('btnFalse').disabled=false;
+  document.getElementById('fbBox').classList.add('hidden');
+  document.getElementById('nextBtn').classList.add('hidden');
+  answered=false;
+}
+
+function answer(val){
+  if(answered)return;answered=true;
+  const q=QS[order[idx]];
+  const correct=val===q.ans;
+  if(correct)score++;
+  document.getElementById('scoreVal').textContent=score;
+  document.getElementById('btnTrue').disabled=true;
+  document.getElementById('btnFalse').disabled=true;
+  const fb=document.getElementById('fbBox');
+  fb.className='fb-box '+(correct?'fb-correct':'fb-wrong');
+  fb.innerHTML=`<span class="fb-icon">${correct?'✅':'❌'}</span><span>${correct?'Correct! ':'Incorrect. '}${q.fb}</span>`;
+  fb.classList.remove('hidden');
+  if(idx<QS.length-1){
+    document.getElementById('nextBtn').classList.remove('hidden');
+  }else{
+    setTimeout(showResult,1200);
+  }
+}
+
+function nextQ(){idx++;showQ();}
+
+function showResult(){
+  const pct=Math.round(score/QS.length*100);
+  const icon=pct>=80?'🏆':pct>=50?'👍':'💪';
+  const title=pct>=80?'Excellent awareness!':pct>=50?'Good effort!':'Keep practising!';
+  document.getElementById('resultIcon').textContent=icon;
+  document.getElementById('resultTitle').textContent=title;
+  document.getElementById('resultText').textContent='Slips, trips and falls cause more workplace injuries than any other single hazard. Recognising risks, maintaining good housekeeping and reporting hazards promptly are key to keeping everyone safe.';
+  document.getElementById('resultScore').textContent='Score: '+score+'/'+QS.length+' ('+pct+'%)';
+  showPage('resultPage');
+}
+
+function resetGame(){showPage('instrPage');}
+
+function showPage(id){
+  ['instrPage','gamePage','resultPage'].forEach(p=>{
+    const el=document.getElementById(p);
+    el.classList.add('hidden');el.style.display='';
+  });
+  const target=document.getElementById(id);
+  target.classList.remove('hidden');
+  if(id==='gamePage')target.style.display='flex';
+  if(id==='resultPage')target.style.display='flex';
+}
+</script>
+</body>
+</html>

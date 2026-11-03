@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MOD6 – Sequence: Emergency Procedures</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#1A237E,#283593,#3949AB);min-height:100vh;overflow:hidden;display:flex;justify-content:center;align-items:center}
+.container{background:#fff;width:800px;height:550px;display:flex;flex-direction:column;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.header{background:linear-gradient(135deg,#1A237E,#283593);color:#fff;padding:10px 18px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.header h1{font-size:15px;font-weight:700}.header p{font-size:11px;opacity:.8;margin-top:1px}
+button{padding:6px 12px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;transition:all .2s}
+.btn-white{background:#fff;color:#1A237E}.btn-white:hover{background:#E8EAF6}
+.btn-outline{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4)}.btn-outline:hover{background:rgba(255,255,255,.25)}
+.btn-group{display:flex;gap:8px}
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.hidden{display:none!important}
+/* INTRO */
+.instr{padding:18px 24px;overflow-y:auto;flex:1}
+.instr h2{color:#1A237E;font-size:16px;margin-bottom:10px}
+.instr p,.instr li{font-size:13px;line-height:1.6;color:#444;margin-bottom:5px}
+.instr ul{margin-left:18px;margin-bottom:10px}
+.how-grid{display:flex;gap:10px;margin:10px 0}
+.how-step{flex:1;background:#E8EAF6;border-radius:8px;padding:10px;text-align:center;font-size:12px;color:#1A237E;font-weight:600;line-height:1.5}
+.how-step .num{font-size:22px;display:block;margin-bottom:4px}
+.start-btn{background:linear-gradient(135deg,#1A237E,#283593);color:#fff;padding:11px 32px;font-size:14px;border-radius:8px;display:block;margin:14px auto 0;cursor:pointer;border:none;font-weight:600}
+.start-btn:hover{transform:translateY(-2px)}
+/* GAME */
+.game-wrap{flex:1;display:flex;flex-direction:column;padding:10px 18px;gap:6px}
+.status-row{display:flex;align-items:center;gap:12px;flex-shrink:0;font-size:12px;color:#555}
+.stat-badge{background:#283593;color:#fff;border-radius:20px;padding:2px 12px;font-size:12px;font-weight:700}
+.progress-bar{flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#283593,#5C6BC0);border-radius:3px;transition:width .3s}
+.score-badge{background:#2E7D32;color:#fff;border-radius:20px;padding:2px 12px;font-size:12px;font-weight:700}
+.challenge-box{background:#E8EAF6;border-radius:10px;padding:10px 14px;font-size:13px;color:#1A237E;font-weight:600;border-left:4px solid #283593;flex-shrink:0}
+.challenge-box .ch-label{font-size:10px;text-transform:uppercase;opacity:.7;margin-bottom:2px}
+.steps-area{display:flex;flex-direction:column;gap:4px;flex:1;overflow-y:auto}
+.step-item{background:#fff;border:2px solid #C5CAE9;border-radius:8px;padding:7px 10px;font-size:12px;color:#333;cursor:pointer;display:flex;align-items:center;gap:8px;user-select:none;transition:all .15s;line-height:1.4}
+.step-item:hover:not(.placed):not(.locked){border-color:#283593;background:#E8EAF6}
+.step-num{width:22px;height:22px;border-radius:50%;background:#C5CAE9;color:#283593;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;flex-shrink:0}
+.step-item.placed{border-color:#283593;background:#E8EAF6;opacity:.85;cursor:default}
+.step-item.placed .step-num{background:#283593;color:#fff}
+.step-item.correct{border-color:#2E7D32;background:#E8F5E9}.step-item.correct .step-num{background:#2E7D32;color:#fff}
+.step-item.wrong{border-color:#C62828;background:#FFEBEE}.step-item.wrong .step-num{background:#C62828;color:#fff}
+.step-item.locked{cursor:default}
+.bottom-bar{display:flex;justify-content:center;align-items:center;gap:10px;flex-shrink:0;min-height:36px}
+.action-btn{background:linear-gradient(135deg,#1A237E,#283593);color:#fff;padding:8px 22px;font-size:12px;border-radius:6px;cursor:pointer;border:none;font-weight:600}
+.action-btn:hover{transform:translateY(-1px)}
+.undo-btn{background:#78909c;color:#fff;padding:8px 16px;font-size:12px;border-radius:6px;cursor:pointer;border:none;font-weight:600}
+.undo-btn:hover{background:#607D8B}
+.fb-seq{border-radius:8px;padding:8px 12px;font-size:11px;line-height:1.6;flex-shrink:0}
+.fb-seq.fb-g{background:#E8F5E9;border-left:4px solid #2E7D32;color:#1B5E20}
+.fb-seq.fb-r{background:#FFEBEE;border-left:4px solid #C62828;color:#B71C1C}
+/* RESULT */
+.result-page{flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div><h1>🔢 Sequence – Emergency Procedures</h1><p>Module 6 – Emergency Procedures and Incident Reporting</p></div>
+    <div class="btn-group">
+      <button class="btn-outline" onclick="resetGame()">🔄 Play Again</button>
+      <button class="btn-white" onclick="window.close()">Back to Course</button>
+    </div>
+  </div>
+  <div class="content">
+    <!-- INTRO -->
+    <div id="instrPage" class="instr">
+      <h2>🎯 How to Play</h2>
+      <p>You will see <strong>3 emergency procedures</strong>, each broken into steps shown in the wrong order. Click the steps <strong>in the correct sequence</strong> — first step first, then the second, and so on.</p>
+      <div class="how-grid">
+        <div class="how-step"><span class="num">🔀</span>Steps are shuffled</div>
+        <div class="how-step"><span class="num">👆</span>Click in order</div>
+        <div class="how-step"><span class="num">✅</span>Check the sequence</div>
+      </div>
+      <ul>
+        <li>Click each step in the correct order — the number appears as you click</li>
+        <li>Use the Undo button to remove the last selection</li>
+        <li>Each correctly ordered procedure scores 2 points (max 6)</li>
+      </ul>
+      <button class="start-btn" onclick="startGame()">▶ Start</button>
+    </div>
+
+    <!-- GAME -->
+    <div id="gamePage" class="game-wrap hidden">
+      <div class="status-row">
+        <span class="stat-badge">Procedure: <span id="qNum">1</span>/3</span>
+        <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:33%"></div></div>
+        <span class="score-badge">Points: <span id="scoreVal">0</span>/6</span>
+      </div>
+      <div class="challenge-box" id="challengeBox"></div>
+      <div class="steps-area" id="stepsArea"></div>
+      <div class="fb-seq hidden" id="fbBox"></div>
+      <div class="bottom-bar" id="bottomBar">
+        <button class="undo-btn hidden" id="undoBtn" onclick="undoLast()">↩ Undo</button>
+        <button class="action-btn hidden" id="checkBtn" onclick="checkOrder()">Check Sequence ✔</button>
+        <button class="action-btn hidden" id="nextBtn" onclick="nextQ()">Next Procedure ▶</button>
+      </div>
+    </div>
+
+    <!-- RESULT -->
+    <div id="resultPage" class="result-page hidden">
+      <div style="text-align:center;max-width:480px">
+        <div style="font-size:55px;margin-bottom:12px" id="resultIcon"></div>
+        <h2 style="font-size:20px;font-weight:700;color:#1A237E;margin-bottom:8px" id="resultTitle"></h2>
+        <p style="font-size:13px;color:#555;line-height:1.6;margin-bottom:15px" id="resultText"></p>
+        <div style="background:#E8EAF6;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:700;color:#283593;margin-bottom:15px;display:inline-block" id="resultScore"></div>
+        <div style="display:flex;gap:10px;justify-content:center">
+          <button style="background:linear-gradient(135deg,#1A237E,#283593);color:#fff;padding:10px 24px;font-size:13px;border-radius:8px;cursor:pointer;border:none;font-weight:600" onclick="resetGame()">🔄 Play Again</button>
+          <button style="background:#78909c;color:#fff;padding:10px 24px;font-size:13px;border-radius:8px;cursor:pointer;border:none;font-weight:600" onclick="window.close()">Back to Course</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const PROCEDURES=[
+  {
+    title:'Fire Alarm Activation',
+    steps:[
+      'Hear the fire alarm or discover a fire',
+      'Alert others nearby and activate the nearest manual call point if not already triggered',
+      'Leave the building immediately using the nearest safe escape route — do not use lifts',
+      'Close doors behind you as you leave to slow the spread of fire and smoke',
+      'Go to the designated assembly point and report to the fire warden',
+      'Do not re-enter the building until the all-clear is given',
+    ]
+  },
+  {
+    title:'First Aid Response to a Collapsed Colleague',
+    steps:[
+      'Check the scene is safe before approaching the casualty',
+      'Try to get a response — tap their shoulders and ask loudly if they are okay',
+      'Call emergency services (or ask someone nearby to call) and request an AED if available',
+      'Open the airway by tilting the head back and lifting the chin',
+      'Check for breathing — look, listen and feel for no more than ten seconds',
+      'If not breathing normally, begin CPR with chest compressions',
+    ]
+  },
+  {
+    title:'Reporting a Workplace Incident',
+    steps:[
+      'Ensure the area is safe and provide immediate first aid to any injured person',
+      'Preserve the scene — do not move or clean anything unless there is further danger',
+      'Notify your supervisor or the designated safety officer as soon as possible',
+      'Complete the incident report form with date, time, location, people involved and a factual description',
+      'Collect the names and statements of any witnesses',
+      'Cooperate with the investigation and follow up on corrective actions assigned to you',
+    ]
+  },
+];
+
+let order=[],idx=0,score=0,checked=false;
+let selections=[]; // indices of steps in the order user clicked them
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+
+function startGame(){
+  order=[...Array(PROCEDURES.length).keys()];shuffle(order);
+  idx=0;score=0;checked=false;selections=[];
+  document.getElementById('scoreVal').textContent='0';
+  showPage('gamePage');
+  showQ();
+}
+
+function showQ(){
+  const p=PROCEDURES[order[idx]];
+  document.getElementById('qNum').textContent=idx+1;
+  document.getElementById('progFill').style.width=((idx+1)/PROCEDURES.length*100)+'%';
+  document.getElementById('challengeBox').innerHTML='<div class="ch-label">Click the steps in the correct order:</div>'+p.title;
+
+  // Shuffle display order
+  const displayOrder=[...Array(p.steps.length).keys()];
+  let tries=0;
+  do{shuffle(displayOrder);tries++;}while(isCorrect(displayOrder)&&tries<50);
+
+  renderSteps(p,displayOrder);
+  selections=[];
+  checked=false;
+  document.getElementById('fbBox').classList.add('hidden');
+  document.getElementById('checkBtn').classList.add('hidden');
+  document.getElementById('nextBtn').classList.add('hidden');
+  document.getElementById('undoBtn').classList.add('hidden');
+}
+
+function isCorrect(indices){return indices.every((v,i)=>v===i);}
+
+function renderSteps(p,displayOrder){
+  const area=document.getElementById('stepsArea');
+  area.innerHTML='';
+  displayOrder.forEach((origIdx)=>{
+    const div=document.createElement('div');
+    div.className='step-item';
+    div.dataset.origIdx=origIdx;
+    div.innerHTML='<span class="step-num">?</span><span>'+p.steps[origIdx]+'</span>';
+    div.addEventListener('click',()=>selectStep(div));
+    area.appendChild(div);
+  });
+}
+
+function selectStep(div){
+  if(checked)return;
+  if(div.classList.contains('placed'))return;
+
+  const stepCount=PROCEDURES[order[idx]].steps.length;
+  const seqNum=selections.length+1;
+
+  div.classList.add('placed');
+  div.querySelector('.step-num').textContent=seqNum;
+  selections.push(div);
+
+  document.getElementById('undoBtn').classList.remove('hidden');
+
+  if(selections.length===stepCount){
+    document.getElementById('checkBtn').classList.remove('hidden');
+    document.getElementById('undoBtn').classList.add('hidden');
+  }
+}
+
+function undoLast(){
+  if(checked||selections.length===0)return;
+  const last=selections.pop();
+  last.classList.remove('placed');
+  last.querySelector('.step-num').textContent='?';
+  document.getElementById('checkBtn').classList.add('hidden');
+  if(selections.length===0){
+    document.getElementById('undoBtn').classList.add('hidden');
+  }
+}
+
+function checkOrder(){
+  if(checked)return;checked=true;
+
+  let allCorrect=true;
+  selections.forEach((div,i)=>{
+    const orig=+div.dataset.origIdx;
+    if(orig===i){
+      div.classList.add('correct');
+    }else{
+      div.classList.add('wrong');
+      allCorrect=false;
+    }
+    div.classList.add('locked');
+  });
+
+  // Also lock unplaced items (shouldn't happen but safety)
+  document.querySelectorAll('#stepsArea .step-item:not(.placed)').forEach(el=>{
+    el.classList.add('locked');
+  });
+
+  if(allCorrect)score+=2;
+  document.getElementById('scoreVal').textContent=score;
+  document.getElementById('checkBtn').classList.add('hidden');
+  document.getElementById('undoBtn').classList.add('hidden');
+
+  const fb=document.getElementById('fbBox');
+  if(allCorrect){
+    fb.className='fb-seq fb-g';
+    fb.textContent='✅ Perfect sequence! Every step is in the correct order.';
+  }else{
+    fb.className='fb-seq fb-r';
+    // Show correct order
+    const p=PROCEDURES[order[idx]];
+    fb.innerHTML='❌ Not quite right. The correct order is:<br>'+p.steps.map((s,i)=>'<strong>'+(i+1)+'.</strong> '+s).join('<br>');
+  }
+  fb.classList.remove('hidden');
+
+  if(idx<PROCEDURES.length-1){
+    document.getElementById('nextBtn').classList.remove('hidden');
+  }else{
+    setTimeout(showResult,1800);
+  }
+}
+
+function nextQ(){idx++;showQ();}
+
+function showResult(){
+  const maxPts=PROCEDURES.length*2;
+  const pct=Math.round(score/maxPts*100);
+  const icon=pct>=80?'🏆':pct>=50?'👍':'💪';
+  const title=pct>=80?'Emergency ready!':pct>=50?'Good awareness!':'Keep practising!';
+  document.getElementById('resultIcon').textContent=icon;
+  document.getElementById('resultTitle').textContent=title;
+  document.getElementById('resultText').textContent='In an emergency, knowing what to do AND in what order makes the difference. Practise your evacuation routes, know where the assembly point is, and always report every incident — even a near-miss.';
+  document.getElementById('resultScore').textContent='Points: '+score+'/'+maxPts+' ('+pct+'%)';
+  showPage('resultPage');
+}
+
+function resetGame(){showPage('instrPage');}
+
+function showPage(id){
+  ['instrPage','gamePage','resultPage'].forEach(p=>{
+    const el=document.getElementById(p);
+    el.classList.add('hidden');el.style.display='';
+  });
+  const target=document.getElementById(id);
+  target.classList.remove('hidden');
+  if(id==='gamePage')target.style.display='flex';
+  if(id==='resultPage')target.style.display='flex';
+}
+</script>
+</body>
+</html>

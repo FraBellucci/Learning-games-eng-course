@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MOD5 – Scenario: Stress, Violence and Harassment</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#4A148C,#6A1B9A,#7B1FA2);min-height:100vh;overflow:hidden;display:flex;justify-content:center;align-items:center}
+.container{background:#fff;width:800px;height:550px;display:flex;flex-direction:column;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.header{background:linear-gradient(135deg,#4A148C,#6A1B9A);color:#fff;padding:10px 18px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.header h1{font-size:20px;font-weight:700}.header p{font-size:11px;opacity:.8;margin-top:1px}
+button{padding:6px 12px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;transition:all .2s}
+.btn-white{background:#fff;color:#4A148C}.btn-white:hover{background:#F3E5F5}
+.btn-outline{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4)}.btn-outline:hover{background:rgba(255,255,255,.25)}
+.btn-group{display:flex;gap:8px}
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.hidden{display:none!important}
+/* INTRO */
+.instr{padding:18px 24px;overflow-y:auto;flex:1}
+.instr h2{color:#4A148C;font-size:20px;margin-bottom:20px}
+.instr p,.instr li{font-size:16px;line-height:1.6;color:#444;margin-bottom:15px}
+.instr ul{margin-left:18px;margin-bottom:10px}
+.how-grid{display:flex;gap:10px;margin:10px 0}
+.how-step{flex:1;background:#F3E5F5;border-radius:8px;padding:10px;text-align:center;font-size:12px;color:#4A148C;font-weight:600;line-height:1.5}
+.how-step .num{font-size:22px;display:block;margin-bottom:4px}
+.start-btn{background:linear-gradient(135deg,#4A148C,#6A1B9A);color:#fff;padding:11px 32px;font-size:14px;border-radius:8px;display:block;margin:14px auto 0;cursor:pointer;border:none;font-weight:600}
+.start-btn:hover{transform:translateY(-2px)}
+/* GAME */
+.game-wrap{flex:1;display:flex;flex-direction:column;overflow-y:auto;padding:12px 20px;gap:6px}
+.status-row{display:flex;align-items:center;gap:12px;flex-shrink:0;font-size:16px;color:#555}
+.stat-badge{background:#6A1B9A;color:#fff;border-radius:20px;padding:2px 12px;font-size:16px;font-weight:700}
+.progress-bar{flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:linear-gradient(90deg,#6A1B9A,#9C27B0);border-radius:5px;transition:width .3s}
+.score-badge{background:#2E7D32;color:#fff;border-radius:20px;padding:2px 12px;font-size:12px;font-weight:700}
+.scenario-box{background:#F3E5F5;border-radius:10px;padding:14px 16px;font-size:16px;color:#333;line-height:1.6;border-left:4px solid #6A1B9A}
+.scenario-box .scene-label{font-size:16px;color:#6A1B9A;font-weight:700;text-transform:uppercase;margin-bottom:4px}
+.options{display:flex;flex-direction:column;gap:5px;margin-top:4px}
+.opt-btn{background:#fff;border:2px solid #CE93D8;border-radius:8px;padding:8px 12px;font-size:14px;color:#333;cursor:pointer;text-align:left;line-height:1.5;transition:all .2s}
+.opt-btn:hover{border-color:#6A1B9A;background:#F3E5F5}
+.opt-btn.chosen-correct{border-color:#2E7D32;background:#E8F5E9;color:#1B5E20}
+.opt-btn.chosen-wrong{border-color:#C62828;background:#FFEBEE;color:#B71C1C}
+.opt-btn.reveal-correct{border-color:#2E7D32;background:#E8F5E9;color:#1B5E20}
+.opt-btn:disabled{cursor:default;opacity:.85}
+.fb-scenario{border-radius:8px;padding:8px 12px;font-size:14px;line-height:1.6;margin-top:10px}
+.fb-scenario.fb-g{background:#E8F5E9;border-left:4px solid #2E7D32;color:#1B5E20}
+.fb-scenario.fb-o{background:#FFF3E0;border-left:4px solid #E65100;color:#BF360C}
+.fb-scenario.fb-r{background:#FFEBEE;border-left:4px solid #C62828;color:#B71C1C}
+.next-btn{background:linear-gradient(135deg,#4A148C,#6A1B9A);color:#fff;padding:8px 22px;font-size:16px;border-radius:6px;cursor:pointer;border:none;font-weight:600;align-self:center;margin-top:2px}
+.next-btn:hover{transform:translateY(-1px)}
+/* RESULT */
+.result-page{flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div><h1>🎭 Scenario – Stress, Violence and Harassment</h1><p>Module 5 – Work-Related Stress, Violence and Harassment</p></div>
+    <div class="btn-group">
+      <button class="btn-outline" onclick="resetGame()">🔄 Play Again</button>
+      <button class="btn-white" onclick="window.close()">Back to Course</button>
+    </div>
+  </div>
+  <div class="content">
+    <!-- INTRO -->
+    <div id="instrPage" class="instr">
+      <h2>🎯 How to Play</h2>
+      <p>You will face <strong>6 realistic workplace scenarios</strong> involving stress, violence or harassment. For each one, choose the best course of action from three options.</p>
+      <div class="how-grid">
+        <div class="how-step"><span class="num">📖</span>Read the scenario</div>
+        <div class="how-step"><span class="num">🤔</span>Choose the best action</div>
+        <div class="how-step"><span class="num">💡</span>Learn from the feedback</div>
+      </div>
+      <ul>
+        <li>One option is best, one is partially correct, and one could make things worse</li>
+        <li>Best answer = 2 points, partial = 1 point, wrong = 0 points</li>
+      </ul>
+      <button class="start-btn" onclick="startGame()">▶ Start</button>
+    </div>
+
+    <!-- GAME -->
+    <div id="gamePage" class="game-wrap hidden">
+      <div class="status-row">
+        <span class="stat-badge">Scenario: <span id="qNum">1</span>/6</span>
+        <div class="progress-bar"><div class="progress-fill" id="progFill" style="width:16.7%"></div></div>
+        <span class="score-badge">Points: <span id="scoreVal">0</span>/12</span>
+      </div>
+      <div class="scenario-box" id="scenarioBox"></div>
+      <div class="options" id="optionsDiv"></div>
+      <div class="fb-scenario hidden" id="fbBox"></div>
+      <button class="next-btn hidden" id="nextBtn" onclick="nextQ()">Next Scenario ▶</button>
+    </div>
+
+    <!-- RESULT -->
+    <div id="resultPage" class="result-page hidden">
+      <div style="text-align:center;max-width:480px">
+        <div style="font-size:55px;margin-bottom:12px" id="resultIcon"></div>
+        <h2 style="font-size:20px;font-weight:700;color:#4A148C;margin-bottom:8px" id="resultTitle"></h2>
+        <p style="font-size:13px;color:#555;line-height:1.6;margin-bottom:15px" id="resultText"></p>
+        <div style="background:#F3E5F5;border-radius:10px;padding:10px 20px;font-size:14px;font-weight:700;color:#6A1B9A;margin-bottom:15px;display:inline-block" id="resultScore"></div>
+        <div style="display:flex;gap:10px;justify-content:center">
+          <button style="background:linear-gradient(135deg,#4A148C,#6A1B9A);color:#fff;padding:10px 24px;font-size:13px;border-radius:8px;cursor:pointer;border:none;font-weight:600" onclick="resetGame()">🔄 Play Again</button>
+          <button style="background:#78909c;color:#fff;padding:10px 24px;font-size:13px;border-radius:8px;cursor:pointer;border:none;font-weight:600" onclick="window.close()">Back to Course</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const SCENARIOS=[
+  {
+    scene:'A colleague regularly makes humiliating comments about your appearance in front of other team members. It has happened at least five times in the past month.',
+    opts:[
+      {text:'Confront the colleague aggressively in front of everyone to make them stop',pts:0,fb:'Responding with aggression can escalate the situation and may result in disciplinary action against you as well.',cls:'fb-r'},
+      {text:'Document each incident and report it to your manager, HR or the designated contact person',pts:2,fb:'This is the correct approach. Documenting incidents with dates and witnesses creates a record, and reporting through the proper channels triggers the formal procedure.',cls:'fb-g'},
+      {text:'Ignore the comments and hope they will stop on their own',pts:1,fb:'While staying calm is important, simply ignoring repeated humiliation does not resolve the problem and may allow the behaviour to escalate. You should still report it.',cls:'fb-o'},
+    ]
+  },
+  {
+    scene:'You notice that a team member has become increasingly withdrawn, is missing deadlines, and appears anxious. They have mentioned feeling overwhelmed by their workload.',
+    opts:[
+      {text:'Tell them to manage their time better and stop complaining',pts:0,fb:'Dismissing a colleague\'s distress signals can worsen their condition and damages trust within the team.',cls:'fb-r'},
+      {text:'Offer to listen, suggest they speak to their manager about workload, and mention the Employee Assistance Programme if available',pts:2,fb:'Correct. Showing empathy, encouraging them to speak up about workload, and pointing to support resources is the best response when you notice a colleague struggling.',cls:'fb-g'},
+      {text:'Take on some of their work yourself without telling anyone',pts:1,fb:'Helping is kind, but silently absorbing their workload hides the real problem from management and risks burning yourself out. The workload issue needs to be addressed officially.',cls:'fb-o'},
+    ]
+  },
+  {
+    scene:'During a team meeting, your supervisor shouts at you, calls you incompetent, and threatens to fire you in front of your colleagues. This is the third time it has happened.',
+    opts:[
+      {text:'Stay calm, note the details, and report the behaviour to HR or a senior manager as workplace bullying',pts:2,fb:'Correct. Repeated shouting, insults and threats from a supervisor constitute bullying. Keeping a factual record and reporting through the proper channel is essential.',cls:'fb-g'},
+      {text:'Shout back at your supervisor to defend yourself',pts:0,fb:'Reacting with anger makes the situation worse and could be used against you. Stay professional and use the reporting channels.',cls:'fb-r'},
+      {text:'Wait until after the meeting and privately ask your supervisor why they are upset',pts:1,fb:'Seeking dialogue is reasonable, but repeated public humiliation is a pattern of bullying that needs formal reporting, not just a private conversation.',cls:'fb-o'},
+    ]
+  },
+  {
+    scene:'A customer becomes verbally aggressive and threatens to harm you because they are unhappy with the service. They are standing very close and raising their voice.',
+    opts:[
+      {text:'Stay calm, do not argue, maintain distance, and call for a colleague or security; report the incident afterwards',pts:2,fb:'Correct. Your safety comes first. De-escalate by staying calm, create physical distance, get help, and always report the incident to your manager.',cls:'fb-g'},
+      {text:'Argue with the customer to prove they are wrong',pts:0,fb:'Arguing with an aggressive person escalates the risk of physical violence. Never challenge someone who is already threatening you.',cls:'fb-r'},
+      {text:'Leave the area immediately without telling anyone',pts:1,fb:'Removing yourself from danger is important, but you should alert a colleague or security so the situation is managed and the incident is documented.',cls:'fb-o'},
+    ]
+  },
+  {
+    scene:'You have been working overtime every week for three months. You feel exhausted, have difficulty sleeping, and are becoming irritable with your family.',
+    opts:[
+      {text:'Push through because you do not want to seem weak or uncommitted',pts:0,fb:'Ignoring chronic stress symptoms leads to burnout and can cause serious physical and mental health problems. Overwork is a structural issue, not a sign of weakness.',cls:'fb-r'},
+      {text:'Speak to your manager about your workload and ask for a realistic review of priorities and deadlines',pts:2,fb:'Correct. Chronic overtime is a risk factor for work-related stress. Speaking up about workload allows your manager to redistribute tasks, adjust deadlines or hire additional help.',cls:'fb-g'},
+      {text:'Start calling in sick to get rest days',pts:1,fb:'Taking sick leave addresses the immediate exhaustion but does not solve the underlying workload problem. The pattern will continue when you return.',cls:'fb-o'},
+    ]
+  },
+  {
+    scene:'A colleague sends you repeated personal messages outside working hours, asking to meet socially. You have declined several times, but the messages continue and are making you uncomfortable.',
+    opts:[
+      {text:'Block the colleague on your personal phone and pretend nothing happened at work',pts:1,fb:'Blocking stops the messages, but ignoring the issue at work means it could resurface in other forms. The unwanted behaviour should be reported.',cls:'fb-o'},
+      {text:'Clearly tell the colleague to stop, save the messages, and report the situation to HR or the designated contact person if it continues',pts:2,fb:'Correct. Repeated unwanted contact that makes you uncomfortable, after you have declined, is a form of harassment. Be clear, keep evidence, and use the reporting channel.',cls:'fb-g'},
+      {text:'Share the messages publicly to embarrass the colleague into stopping',pts:0,fb:'Publicly shaming someone can constitute harassment itself and may breach data protection rules. Use the proper reporting channels instead.',cls:'fb-r'},
+    ]
+  },
+];
+
+let order=[],idx=0,score=0,answered=false;
+
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}}
+
+function startGame(){
+  order=[...Array(SCENARIOS.length).keys()];shuffle(order);
+  idx=0;score=0;answered=false;
+  document.getElementById('scoreVal').textContent='0';
+  showPage('gamePage');
+  showQ();
+}
+
+function showQ(){
+  const s=SCENARIOS[order[idx]];
+  document.getElementById('qNum').textContent=idx+1;
+  document.getElementById('progFill').style.width=((idx+1)/SCENARIOS.length*100)+'%';
+  document.getElementById('scenarioBox').innerHTML='<div class="scene-label">Scenario '+(idx+1)+'</div>'+s.scene;
+  const od=document.getElementById('optionsDiv');
+  od.innerHTML='';
+  // Shuffle options
+  const optOrder=[0,1,2];shuffle(optOrder);
+  optOrder.forEach(oi=>{
+    const opt=s.opts[oi];
+    const btn=document.createElement('button');
+    btn.className='opt-btn';
+    btn.textContent=opt.text;
+    btn.addEventListener('click',()=>answer(oi,btn));
+    od.appendChild(btn);
+  });
+  document.getElementById('fbBox').classList.add('hidden');
+  document.getElementById('nextBtn').classList.add('hidden');
+  answered=false;
+}
+
+function answer(oi,btn){
+  if(answered)return;answered=true;
+  const s=SCENARIOS[order[idx]];
+  const opt=s.opts[oi];
+  score+=opt.pts;
+  document.getElementById('scoreVal').textContent=score;
+  // Disable all
+  document.querySelectorAll('.opt-btn').forEach(b=>{
+    b.disabled=true;
+    const bText=b.textContent;
+    const bOpt=s.opts.find(o=>o.text===bText);
+    if(bOpt&&bOpt.pts===2)b.classList.add('reveal-correct');
+  });
+  btn.className='opt-btn '+(opt.pts===2?'chosen-correct':opt.pts===1?'chosen-wrong':'chosen-wrong');
+  const fb=document.getElementById('fbBox');
+  fb.className='fb-scenario '+opt.cls;
+  fb.textContent=(opt.pts===2?'✅ Best answer! ':opt.pts===1?'⚠️ Partially correct. ':'❌ Not recommended. ')+opt.fb;
+  fb.classList.remove('hidden');
+  if(idx<SCENARIOS.length-1){
+    document.getElementById('nextBtn').classList.remove('hidden');
+  }else{
+    setTimeout(showResult,1500);
+  }
+}
+
+function nextQ(){idx++;showQ();}
+
+function showResult(){
+  const maxPts=SCENARIOS.length*2;
+  const pct=Math.round(score/maxPts*100);
+  const icon=pct>=80?'🏆':pct>=50?'👍':'💪';
+  const title=pct>=80?'Outstanding judgement!':pct>=50?'Good awareness!':'Room for improvement';
+  document.getElementById('resultIcon').textContent=icon;
+  document.getElementById('resultTitle').textContent=title;
+  document.getElementById('resultText').textContent='Recognising the early signs of stress, knowing how to respond to aggression, and understanding what constitutes harassment are essential skills for every worker. Always document, report, and use the support channels available to you.';
+  document.getElementById('resultScore').textContent='Points: '+score+'/'+maxPts+' ('+pct+'%)';
+  showPage('resultPage');
+}
+
+function resetGame(){showPage('instrPage');}
+
+function showPage(id){
+  ['instrPage','gamePage','resultPage'].forEach(p=>{
+    const el=document.getElementById(p);
+    el.classList.add('hidden');el.style.display='';
+  });
+  const target=document.getElementById(id);
+  target.classList.remove('hidden');
+  if(id==='gamePage')target.style.display='flex';
+  if(id==='resultPage')target.style.display='flex';
+}
+</script>
+</body>
+</html>
