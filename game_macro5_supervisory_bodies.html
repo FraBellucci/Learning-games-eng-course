@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MACRO 5 – Who Should You Contact?</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#4a148c,#6a1b9a,#8e24aa);min-height:100vh;overflow:hidden;display:flex;justify-content:center;align-items:center}
+.container{background:#fff;width:800px;height:550px;display:flex;flex-direction:column;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.header{background:linear-gradient(135deg,#4a148c,#6a1b9a);color:#fff;padding:11px 18px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.header h1{font-size:15px;font-weight:700}.header p{font-size:11px;opacity:.8;margin-top:1px}
+button{padding:7px 13px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;transition:all .2s}
+.btn-white{background:#fff;color:#4a148c}.btn-white:hover{background:#f3e5f5}
+.btn-outline{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4)}.btn-outline:hover{background:rgba(255,255,255,.25)}
+.btn-group{display:flex;gap:8px}
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.hidden{display:none!important}
+.instr{padding:18px 24px;overflow-y:auto;flex:1}
+.instr h2{color:#4a148c;font-size:20px;margin-bottom:10px}
+.instr p,.instr li{font-size:18px;line-height:1.6;color:#444;margin-bottom:5px}
+.instr ul{margin-left:18px;margin-bottom:10px}
+.how-grid{display:flex;gap:10px;margin:10px 0}
+.how-step{flex:1;background:#f3e5f5;border-radius:8px;padding:10px;text-align:center;font-size:12px;color:#4a148c;font-weight:600;line-height:1.5}
+.how-step .num{font-size:22px;display:block;margin-bottom:4px}
+.start-btn{background:linear-gradient(135deg,#4a148c,#6a1b9a);color:#fff;padding:11px 32px;font-size:14px;border-radius:8px;display:block;margin:14px auto 0;cursor:pointer;border:none;font-weight:600}
+.start-btn:hover{transform:translateY(-2px)}
+.game-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:12px 20px;gap:10px}
+.status-bar{display:flex;align-items:center;gap:12px;flex-shrink:0;font-size:12px;color:#555}
+.prog-bar{flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,#4a148c,#ce93d8);border-radius:3px;transition:width .4s}
+.score-lbl{font-weight:700;color:#4a148c;white-space:nowrap}
+.scenario-card{background:#fafafa;border:2px solid #e0e0e0;border-radius:10px;padding:16px 20px;flex-shrink:0}
+.scenario-card h3{font-size:13px;color:#4a148c;margin-bottom:6px}
+.scenario-card p{font-size:13px;color:#333;line-height:1.6}
+.options{display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+.opt-btn{background:#fff;border:2px solid #e0e0e0;border-radius:8px;padding:10px 16px;font-size:13px;color:#333;text-align:left;cursor:pointer;font-weight:500;transition:all .2s}
+.opt-btn:hover{border-color:#6a1b9a;background:#faf0ff}
+.opt-btn.correct{border-color:#2e7d32;background:#e8f5e9;color:#1b5e20}
+.opt-btn.wrong{border-color:#c62828;background:#ffebee;color:#b71c1c}
+.opt-btn.disabled{pointer-events:none;opacity:.7}
+.feedback-box{border-radius:8px;padding:10px 14px;font-size:12px;line-height:1.5;flex-shrink:0;display:none}
+.feedback-box.correct-fb{background:#e8f5e9;border-left:4px solid #2e7d32;color:#1b5e20}
+.feedback-box.wrong-fb{background:#ffebee;border-left:4px solid #c62828;color:#b71c1c}
+.next-btn{background:linear-gradient(135deg,#4a148c,#6a1b9a);color:#fff;padding:8px 20px;font-size:12px;border-radius:7px;cursor:pointer;border:none;font-weight:600;align-self:flex-end;display:none}
+.result-page{flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
+.result-box{text-align:center;max-width:480px}
+.result-icon{font-size:55px;margin-bottom:12px}
+.result-box h2{font-size:20px;font-weight:700;color:#4a148c;margin-bottom:8px}
+.result-box p{font-size:13px;color:#555;line-height:1.6;margin-bottom:15px}
+.result-score{background:#f3e5f5;border-radius:10px;padding:10px 20px;font-size:15px;font-weight:700;color:#4a148c;margin-bottom:15px;display:inline-block}
+.result-btns{display:flex;gap:10px;justify-content:center}
+.btn-prim{background:linear-gradient(135deg,#4a148c,#6a1b9a);color:#fff;padding:10px 24px;font-size:13px;border-radius:8px;cursor:pointer;border:none;font-weight:600}
+.btn-sec{background:#78909c;color:#fff;padding:10px 24px;font-size:13px;border-radius:8px;cursor:pointer;border:none;font-weight:600}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div><h1>🏛️ Who Should You Contact?</h1><p>MACRO 5 – Supervisory, Control and Assistance Bodies</p></div>
+    <div class="btn-group">
+      <button class="btn-outline" onclick="resetGame()">🔄 Play Again</button>
+      <button class="btn-white" onclick="window.close()">Back to Course</button>
+    </div>
+  </div>
+  <div class="content">
+    <div id="instrPage" class="instr">
+      <h2>🎯 Objective</h2>
+      <p>Several public bodies oversee workplace safety in Italy. In each scenario, choose the <strong>correct body to contact</strong> or that is responsible for the situation described.</p>
+      <div class="how-grid">
+        <div class="how-step"><span class="num">🏛️</span>ASL/ATS<br><span style="font-weight:400;font-size:10px">Local Health Authority — inspections</span></div>
+        <div class="how-step"><span class="num">🛡️</span>INAIL<br><span style="font-weight:400;font-size:10px">Insurance, accidents, prevention</span></div>
+        <div class="how-step"><span class="num">🔥</span>VV.FF.<br><span style="font-weight:400;font-size:10px">Fire prevention &amp; certificates</span></div>
+        <div class="how-step"><span class="num">⚖️</span>INL<br><span style="font-weight:400;font-size:10px">National Labour Inspectorate</span></div>
+      </div>
+      <button class="start-btn" onclick="startGame()">▶ Start Game</button>
+    </div>
+    <div id="gamePage" class="game-wrap hidden">
+      <div class="status-bar">Scenario: <span class="score-lbl"><span id="qNum">1</span>/8</span>
+        <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+        Correct: <span class="score-lbl" id="scoreLbl">0</span>
+      </div>
+      <div class="scenario-card"><h3 id="scnTitle"></h3><p id="scnText"></p></div>
+      <div class="options" id="optBox"></div>
+      <div class="feedback-box" id="fbBox"></div>
+      <button class="next-btn" id="nextBtn" onclick="nextQ()">Next Scenario ▶</button>
+    </div>
+    <div id="resultPage" class="result-page hidden">
+      <div class="result-box">
+        <div class="result-icon" id="resultIcon"></div>
+        <h2 id="resultTitle"></h2><p id="resultText"></p>
+        <div class="result-score" id="resultScore"></div>
+        <div class="result-btns">
+          <button class="btn-prim" onclick="resetGame()">🔄 Play Again</button>
+          <button class="btn-sec" onclick="window.close()">Back to Course</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const SCENARIOS=[
+  {title:'Scenario 1 – Workplace Inspection',text:'A team of inspectors arrives unannounced at a manufacturing plant to verify compliance with safety regulations, check the DVR, and interview workers. Which body are they most likely from?',opts:['ASL / ATS (Local Health Authority)','INAIL (Workers\' Insurance)','Vigili del Fuoco (Fire Service)','INL (Labour Inspectorate)'],ans:0,fb:'The ASL/ATS is the primary body responsible for workplace safety inspections. Their inspectors (SPSAL — Servizio Prevenzione e Sicurezza Ambienti di Lavoro) have the power to enter premises, examine documents, and issue improvement or prohibition notices.'},
+  {title:'Scenario 2 – Accident Report',text:'A worker breaks his leg falling from a scaffold. The employer must report the accident within 2 days because the prognosis exceeds 3 days. To which body must the accident report be sent?',opts:['ASL / ATS','INAIL','Vigili del Fuoco','INL'],ans:1,fb:'INAIL is the body that manages workers\' insurance against accidents and occupational diseases. The employer must report the accident electronically to INAIL within 2 days (24 hours for fatal or very serious accidents). INAIL then handles compensation and rehabilitation.'},
+  {title:'Scenario 3 – Fire Safety Certificate',text:'A newly built hotel needs certification that its fire prevention and protection systems comply with regulations before it can open to the public. Which body issues this certificate?',opts:['ASL / ATS','INAIL','Vigili del Fuoco (Fire Service)','INL'],ans:2,fb:'The Vigili del Fuoco (Fire Service / Corpo Nazionale dei Vigili del Fuoco) are responsible for fire prevention. They inspect premises, test fire protection systems, and issue the SCIA antincendio (fire safety certificate) required for businesses in designated categories.'},
+  {title:'Scenario 4 – Undeclared Workers',text:'An anonymous tip reports that a construction company is employing workers without regular contracts, paying them cash, and not providing mandatory safety training. Which body investigates this?',opts:['ASL / ATS','INAIL','Vigili del Fuoco','INL (National Labour Inspectorate)'],ans:3,fb:'The INL (Ispettorato Nazionale del Lavoro) investigates irregular employment, undeclared work, and labour law violations. They can suspend business activities when more than 10% of workers are found to be undeclared or when serious safety violations are present.'},
+  {title:'Scenario 5 – Occupational Disease',text:'A long-time agricultural worker is diagnosed with a musculoskeletal condition caused by years of repetitive heavy lifting. His doctor certifies it as an occupational disease. Who manages the compensation claim?',opts:['ASL / ATS','INAIL','Vigili del Fuoco','INL'],ans:1,fb:'INAIL manages compensation for both workplace accidents AND occupational diseases. The worker (through the employer or directly) files a claim with INAIL, which assesses the degree of disability, provides medical treatment, and pays compensation or a disability pension.'},
+  {title:'Scenario 6 – Chemical Exposure Limits',text:'The ASL inspectors take air samples in a factory to measure worker exposure to chemical solvents. They compare the results against occupational exposure limits. If levels exceed the limits, they can order the employer to:',opts:['Pay a fine to INAIL','Immediately stop the dangerous activity','Apply for a new fire certificate','File a report with the Ministry'],ans:1,fb:'The ASL/ATS inspectors act as Ufficiali di Polizia Giudiziaria. When they find a serious and imminent danger, they have the power to issue a PROHIBITION NOTICE — ordering the immediate cessation of the dangerous activity until the hazard is eliminated.'},
+  {title:'Scenario 7 – Prevention Research',text:'A national body publishes guidelines on safe manual handling of loads, provides free training materials, develops technical standards for machinery safety, and runs awareness campaigns. Which body is this?',opts:['ASL / ATS','INAIL (research and prevention function)','Vigili del Fuoco','INL'],ans:1,fb:'INAIL has a dual role: it is both an insurance body AND a prevention/research body. Through its research department (ex-ISPESL), INAIL develops technical guidelines, publishes best-practice documents, and provides free resources for workplace safety.'},
+  {title:'Scenario 8 – Business Suspension',text:'Inspectors find that a company has 3 out of 20 workers without contracts (15%) and no Risk Assessment Document (DVR). They issue an order to immediately suspend all business activities. Under whose authority is this suspension?',opts:['ASL / ATS','INAIL','Vigili del Fuoco','INL (National Labour Inspectorate)'],ans:3,fb:'The INL has the power to order the suspension of business activities when: (a) more than 10% of workers are found to be undeclared, or (b) serious safety violations from a specific list are found (including missing DVR, missing training, missing health surveillance). The suspension continues until violations are remedied and fines are paid.'},
+];
+let qs=[],qi=0,score=0,answered=false;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function startGame(){qs=shuffle([...SCENARIOS]);qi=0;score=0;answered=false;showQ();showPage('gamePage');}
+function showQ(){answered=false;const s=qs[qi];document.getElementById('qNum').textContent=qi+1;document.getElementById('progFill').style.width=(qi/qs.length*100)+'%';document.getElementById('scoreLbl').textContent=score;document.getElementById('scnTitle').textContent=s.title;document.getElementById('scnText').textContent=s.text;
+  const ob=document.getElementById('optBox');ob.innerHTML='';
+  s.opts.forEach((o,i)=>{const b=document.createElement('button');b.className='opt-btn';b.textContent=o;b.onclick=()=>answerQ(i);ob.appendChild(b);});
+  document.getElementById('fbBox').style.display='none';document.getElementById('fbBox').className='feedback-box';document.getElementById('nextBtn').style.display='none';}
+function answerQ(i){if(answered)return;answered=true;const s=qs[qi];const btns=document.querySelectorAll('.opt-btn');btns.forEach((b,j)=>{b.classList.add('disabled');if(j===s.ans)b.classList.add('correct');if(j===i&&i!==s.ans)b.classList.add('wrong');});
+  if(i===s.ans)score++;const fb=document.getElementById('fbBox');fb.textContent=s.fb;fb.className='feedback-box '+(i===s.ans?'correct-fb':'wrong-fb');fb.style.display='block';
+  document.getElementById('nextBtn').style.display='block';document.getElementById('scoreLbl').textContent=score;}
+function nextQ(){qi++;if(qi>=qs.length){const pct=Math.round(score/qs.length*100);document.getElementById('resultIcon').textContent=pct>=80?'🏆':pct>=50?'👍':'💪';document.getElementById('resultTitle').textContent=pct>=80?'Institutional Expert!':pct>=50?'Good Knowledge!':'Review the Bodies!';document.getElementById('resultText').textContent='Italy\'s workplace safety system relies on several public bodies: the ASL/ATS inspects workplaces, INAIL handles insurance and prevention research, the Vigili del Fuoco certify fire safety, and the INL combats irregular employment. Each has distinct powers and responsibilities.';document.getElementById('resultScore').textContent='Correct: '+score+'/'+qs.length;showPage('resultPage');}else{showQ();}}
+function resetGame(){showPage('instrPage');}
+function showPage(id){['instrPage','gamePage','resultPage'].forEach(p=>document.getElementById(p).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
+</script>
+</body>
+</html>

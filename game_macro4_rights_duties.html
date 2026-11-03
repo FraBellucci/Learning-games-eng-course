@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MACRO 4 – True or False: Rights, Duties &amp; Sanctions</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#1b5e20,#2e7d32,#43a047);min-height:100vh;overflow:hidden;display:flex;justify-content:center;align-items:center}
+.container{background:#fff;width:800px;height:550px;display:flex;flex-direction:column;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.header{background:linear-gradient(135deg,#1b5e20,#2e7d32);color:#fff;padding:11px 18px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.header h1{font-size:15px;font-weight:700}.header p{font-size:11px;opacity:.8;margin-top:1px}
+button{padding:7px 13px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;transition:all .2s}
+.btn-white{background:#fff;color:#1b5e20}.btn-white:hover{background:#e8f5e9}
+.btn-outline{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4)}.btn-outline:hover{background:rgba(255,255,255,.25)}
+.btn-group{display:flex;gap:8px}
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.hidden{display:none!important}
+.instr{padding:18px 24px;overflow-y:auto;flex:1}
+.instr h2{color:#1b5e20;font-size:20px;margin-bottom:10px}
+.instr p,.instr li{font-size:16px;line-height:1.6;color:#444;margin-bottom:5px}
+.instr ul{margin-left:18px;margin-bottom:10px}
+.how-grid{display:flex;gap:10px;margin:10px 0}
+.how-step{flex:1;background:#e8f5e9;border-radius:8px;padding:10px;text-align:center;font-size:14px;color:#1b5e20;font-weight:600;line-height:1.5}
+.how-step .num{font-size:22px;display:block;margin-bottom:4px}
+.start-btn{background:linear-gradient(135deg,#1b5e20,#2e7d32);color:#fff;padding:11px 32px;font-size:14px;border-radius:8px;display:block;margin:14px auto 0;cursor:pointer;border:none;font-weight:600}
+.start-btn:hover{transform:translateY(-2px)}
+.game-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:14px 24px;gap:10px}
+.status-bar{display:flex;align-items:center;gap:12px;flex-shrink:0;font-size:12px;color:#555}
+.prog-bar{flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,#1b5e20,#81c784);border-radius:3px;transition:width .4s}
+.score-lbl{font-weight:700;color:#1b5e20;white-space:nowrap}
+.stmt-card{background:#fafafa;border:2px solid #e0e0e0;border-radius:10px;padding:20px 24px;min-height:85px;display:flex;align-items:center;justify-content:center;text-align:center;flex-shrink:0}
+.stmt-card p{font-size:15px;color:#333;line-height:1.6;font-weight:500}
+.tf-btns{display:flex;gap:16px;justify-content:center;flex-shrink:0}
+.tf-btn{width:130px;padding:12px;font-size:15px;font-weight:700;border-radius:10px;border:2px solid #e0e0e0;background:#fff;cursor:pointer;transition:all .2s}
+.tf-btn.true-b:hover{background:#e8f5e9;border-color:#2e7d32}
+.tf-btn.false-b:hover{background:#ffebee;border-color:#c62828}
+.tf-btn.correct{background:#e8f5e9;border-color:#2e7d32;color:#1b5e20}
+.tf-btn.wrong{background:#ffebee;border-color:#c62828;color:#b71c1c}
+.tf-btn.disabled{pointer-events:none;opacity:.6}
+.feedback-box{border-radius:8px;padding:10px 14px;font-size:12px;line-height:1.5;flex-shrink:0;display:none}
+.feedback-box.correct-fb{background:#e8f5e9;border-left:4px solid #2e7d32;color:#1b5e20}
+.feedback-box.wrong-fb{background:#ffebee;border-left:4px solid #c62828;color:#b71c1c}
+.next-btn{background:linear-gradient(135deg,#1b5e20,#2e7d32);color:#fff;padding:8px 20px;font-size:12px;border-radius:7px;cursor:pointer;border:none;font-weight:600;align-self:center;display:none}
+.result-page{flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
+.result-box{text-align:center;max-width:480px}
+.result-icon{font-size:55px;margin-bottom:12px}
+.result-box h2{font-size:20px;font-weight:700;color:#1b5e20;margin-bottom:8px}
+.result-box p{font-size:13px;color:#555;line-height:1.6;margin-bottom:15px}
+.result-score{background:#e8f5e9;border-radius:10px;padding:10px 20px;font-size:15px;font-weight:700;color:#1b5e20;margin-bottom:15px;display:inline-block}
+.result-btns{display:flex;gap:10px;justify-content:center}
+.btn-prim{background:linear-gradient(135deg,#1b5e20,#2e7d32);color:#fff;padding:10px 24px;font-size:13px;border-radius:8px;cursor:pointer;border:none;font-weight:600}
+.btn-sec{background:#78909c;color:#fff;padding:10px 24px;font-size:13px;border-radius:8px;cursor:pointer;border:none;font-weight:600}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div><h1>✅ True or False: Rights, Duties &amp; Sanctions</h1><p>MACRO 4 – Test your knowledge of workers' and employers' obligations</p></div>
+    <div class="btn-group">
+      <button class="btn-outline" onclick="resetGame()">🔄 Play Again</button>
+      <button class="btn-white" onclick="window.close()">Back to Course</button>
+    </div>
+  </div>
+  <div class="content">
+    <div id="instrPage" class="instr">
+      <h2>🎯 Objective</h2>
+      <p>Read each statement about workers' rights, duties, and the sanctions system under D.Lgs. 81/08. Decide whether it is <strong>TRUE</strong> or <strong>FALSE</strong> and learn from the feedback.</p>
+      <div class="how-grid">
+        <div class="how-step"><span class="num">📖</span>Read the statement</div>
+        <div class="how-step"><span class="num">✅❌</span>Choose TRUE or FALSE</div>
+        <div class="how-step"><span class="num">💡</span>Read the explanation</div>
+      </div>
+      <p>10 statements, shuffled each time. Good luck!</p>
+      <button class="start-btn" onclick="startGame()">▶ Start Game</button>
+    </div>
+    <div id="gamePage" class="game-wrap hidden">
+      <div class="status-bar">Question: <span class="score-lbl"><span id="qNum">1</span>/10</span>
+        <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+        Correct: <span class="score-lbl" id="scoreLbl">0</span>
+      </div>
+      <div class="stmt-card"><p id="stmtText"></p></div>
+      <div class="tf-btns">
+        <button class="tf-btn true-b" id="trueBtn" onclick="answer(true)">✅ TRUE</button>
+        <button class="tf-btn false-b" id="falseBtn" onclick="answer(false)">❌ FALSE</button>
+      </div>
+      <div class="feedback-box" id="fbBox"></div>
+      <button class="next-btn" id="nextBtn" onclick="nextQ()">Next ▶</button>
+    </div>
+    <div id="resultPage" class="result-page hidden">
+      <div class="result-box">
+        <div class="result-icon" id="resultIcon"></div>
+        <h2 id="resultTitle"></h2><p id="resultText"></p>
+        <div class="result-score" id="resultScore"></div>
+        <div class="result-btns">
+          <button class="btn-prim" onclick="resetGame()">🔄 Play Again</button>
+          <button class="btn-sec" onclick="window.close()">Back to Course</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const QS=[
+  {stmt:'Workers have the right to leave their workstation immediately if they believe they are in serious and imminent danger.',ans:true,fb:'TRUE. Art. 44 of D.Lgs. 81/08 grants workers the right to move away from danger without suffering any negative consequence, provided their judgement is reasonable.'},
+  {stmt:'A worker who does not wear the PPE provided by the employer cannot be sanctioned because PPE use is optional.',ans:false,fb:'FALSE. Art. 20 makes PPE use mandatory. A worker who repeatedly refuses to use PPE can face disciplinary action and even criminal penalties (arrest up to 1 month or a fine).'},
+  {stmt:'The employer can delegate the Risk Assessment (DVR) to the RSPP if the company has more than 50 employees.',ans:false,fb:'FALSE. The Risk Assessment is a NON-DELEGABLE obligation of the employer (Art. 17). It cannot be delegated to anyone, regardless of company size.'},
+  {stmt:'Workers must report any unsafe conditions, defective equipment, or hazardous situations to the employer or the Preposto.',ans:true,fb:'TRUE. Art. 20 requires workers to immediately report any conditions that could create danger, as well as any deficiency in safety systems or PPE.'},
+  {stmt:'The Preposto can be held criminally liable if they fail to intervene when they observe a worker behaving unsafely.',ans:true,fb:'TRUE. Art. 19 requires the Preposto to intervene immediately when they observe non-compliance with safety procedures. Failure to act can result in criminal penalties.'},
+  {stmt:'Workers have the right to receive safety training, but the cost of the training can be deducted from their salary.',ans:false,fb:'FALSE. Art. 37 clearly states that safety training must be provided at no cost to the worker and must take place during working hours. Any cost is borne by the employer.'},
+  {stmt:'A worker who reports a safety concern to the RLS is protected against retaliation by the employer.',ans:true,fb:'TRUE. Workers have the right to report concerns without fear of retaliation. D.Lgs. 24/2023 (whistleblowing law) provides legal protection against retaliation for workers who report safety violations. Art. 50 of D.Lgs. 81/2008 separately protects the RLS from any prejudice arising from the exercise of their representative functions.'},
+  {stmt:'Criminal sanctions under D.Lgs. 81/08 apply only to the employer, not to workers or supervisors.',ans:false,fb:'FALSE. Criminal sanctions (arrest and/or fines) apply to ALL safety figures: employers, managers (dirigenti), supervisors (preposti), AND workers. Each has specific obligations and corresponding penalties.'},
+  {stmt:'Workers are entitled to elect their own safety representative (RLS) — the employer cannot choose one for them.',ans:true,fb:'TRUE. Art. 47 establishes that the RLS is elected directly by workers (in companies with up to 15 employees) or by union representatives. The employer has no role in this selection.'},
+  {stmt:'An employer who fails to provide mandatory safety training can be arrested and the company can be shut down.',ans:true,fb:'TRUE. Art. 55 provides for arrest (from 2 to 4 months) for failure to provide mandatory training. In severe cases, the judicial authority can order suspension of the business activity.'},
+];
+let qs=[],qi=0,score=0,answered=false;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function startGame(){qs=shuffle([...QS]);qi=0;score=0;answered=false;showQ();showPage('gamePage');}
+function showQ(){answered=false;const q=qs[qi];document.getElementById('qNum').textContent=qi+1;document.getElementById('progFill').style.width=(qi/qs.length*100)+'%';document.getElementById('scoreLbl').textContent=score;document.getElementById('stmtText').textContent=q.stmt;
+  document.getElementById('trueBtn').className='tf-btn true-b';document.getElementById('falseBtn').className='tf-btn false-b';
+  document.getElementById('fbBox').style.display='none';document.getElementById('fbBox').className='feedback-box';document.getElementById('nextBtn').style.display='none';}
+function answer(val){if(answered)return;answered=true;const q=qs[qi];const correct=val===q.ans;if(correct)score++;
+  const tBtn=document.getElementById('trueBtn'),fBtn=document.getElementById('falseBtn');
+  tBtn.classList.add('disabled');fBtn.classList.add('disabled');
+  if(q.ans===true)tBtn.classList.add('correct');else fBtn.classList.add('correct');
+  if(!correct){if(val===true)tBtn.classList.add('wrong');else fBtn.classList.add('wrong');}
+  const fb=document.getElementById('fbBox');fb.textContent=q.fb;fb.className='feedback-box '+(correct?'correct-fb':'wrong-fb');fb.style.display='block';
+  document.getElementById('nextBtn').style.display='block';document.getElementById('scoreLbl').textContent=score;}
+function nextQ(){qi++;if(qi>=qs.length){const pct=Math.round(score/qs.length*100);document.getElementById('resultIcon').textContent=pct>=80?'🏆':pct>=50?'👍':'💪';document.getElementById('resultTitle').textContent=pct>=80?'Rights Expert!':pct>=50?'Good Awareness!':'Review the Law!';document.getElementById('resultText').textContent='Knowing your rights AND duties is essential. D.Lgs. 81/08 establishes obligations for everyone in the company — from the employer to each individual worker. Sanctions are real and can include criminal penalties for any safety figure who fails to comply.';document.getElementById('resultScore').textContent='Correct: '+score+'/'+qs.length;showPage('resultPage');}else{showQ();}}
+function resetGame(){showPage('instrPage');}
+function showPage(id){['instrPage','gamePage','resultPage'].forEach(p=>document.getElementById(p).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
+</script>
+</body>
+</html>

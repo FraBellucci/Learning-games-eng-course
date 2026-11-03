@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>MACRO 2 – Order the Hierarchy of Controls</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',sans-serif;background:linear-gradient(135deg,#E65100,#F57C00,#FFB74D);min-height:100vh;overflow:hidden;display:flex;justify-content:center;align-items:center}
+.container{background:#fff;width:800px;height:550px;display:flex;flex-direction:column;border-radius:10px;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.header{background:linear-gradient(135deg,#E65100,#F57C00);color:#fff;padding:11px 18px;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.header h1{font-size:15px;font-weight:700}.header p{font-size:11px;opacity:.8;margin-top:1px}
+button{padding:7px 13px;border:none;border-radius:6px;cursor:pointer;font-size:12px;font-weight:600;transition:all .2s}
+.btn-white{background:#fff;color:#E65100}.btn-white:hover{background:#fff3e0}
+.btn-outline{background:rgba(255,255,255,.15);color:#fff;border:1px solid rgba(255,255,255,.4)}.btn-outline:hover{background:rgba(255,255,255,.25)}
+.btn-group{display:flex;gap:8px}
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.hidden{display:none!important}
+.instr{padding:18px 24px;overflow-y:auto;flex:1}
+.instr h2{color:#E65100;font-size:20px;margin-bottom:10px}
+.instr p,.instr li{font-size:16px;line-height:1.6;color:#444;margin-bottom:5px}
+.instr ul{margin-left:18px;margin-bottom:10px}
+.how-grid{display:flex;gap:10px;margin:10px 0}
+.how-step{flex:1;background:#fff3e0;border-radius:8px;padding:10px;text-align:center;font-size:12px;color:#E65100;font-weight:600;line-height:1.5}
+.how-step .num{font-size:22px;display:block;margin-bottom:4px}
+.start-btn{background:linear-gradient(135deg,#E65100,#F57C00);color:#fff;padding:11px 32px;font-size:14px;border-radius:8px;display:block;margin:14px auto 0;cursor:pointer;border:none;font-weight:600}
+.start-btn:hover{transform:translateY(-2px)}
+.game-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;padding:12px 20px;gap:8px}
+.status-bar{display:flex;align-items:center;gap:12px;flex-shrink:0;font-size:12px;color:#555}
+.prog-bar{flex:1;height:6px;background:#eee;border-radius:3px;overflow:hidden}
+.prog-fill{height:100%;background:linear-gradient(90deg,#E65100,#FFB74D);border-radius:3px;transition:width .4s}
+.score-lbl{font-weight:700;color:#E65100;white-space:nowrap}
+.seq-instruction{font-size:12px;color:#777;text-align:center;flex-shrink:0}
+.seq-area{flex:1;display:flex;gap:16px;min-height:0}
+.seq-col{flex:1;display:flex;flex-direction:column;gap:6px;min-height:0}
+.seq-col h3{font-size:12px;color:#E65100;font-weight:700;text-align:center;flex-shrink:0;margin-bottom:4px}
+.seq-list{flex:1;display:flex;flex-direction:column;gap:5px;overflow-y:auto;padding:4px}
+.seq-item{background:#fff;border:2px solid #ffe0b2;border-radius:8px;padding:10px 14px;font-size:13px;color:#333;cursor:grab;user-select:none;font-weight:500;transition:all .2s;line-height:1;display:flex;align-items:center;gap:8px}
+.seq-item:hover{border-color:#F57C00;background:#fff8f0;transform:translateX(2px)}
+.seq-item .num-badge{background:#E65100;color:#fff;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex-shrink:0}
+.seq-item.correct-s{border-color:#2e7d32;background:#e8f5e9}
+.seq-item.correct-s .num-badge{background:#2e7d32}
+.seq-item.wrong-s{border-color:#c62828;background:#ffebee}
+.seq-item.wrong-s .num-badge{background:#c62828}
+.seq-item.dragging{opacity:.4}
+.check-btn{background:linear-gradient(135deg,#E65100,#F57C00);color:#fff;padding:9px 24px;font-size:13px;border-radius:7px;cursor:pointer;border:none;font-weight:600;align-self:center;flex-shrink:0}
+.check-btn:disabled{background:#ccc;cursor:not-allowed}
+.result-page{flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
+.result-box{text-align:center;max-width:480px}
+.result-icon{font-size:55px;margin-bottom:12px}
+.result-box h2{font-size:20px;font-weight:700;color:#E65100;margin-bottom:8px}
+.result-box p{font-size:13px;color:#555;line-height:1.6;margin-bottom:15px}
+.result-score{background:#fff3e0;border-radius:10px;padding:10px 20px;font-size:15px;font-weight:700;color:#E65100;margin-bottom:15px;display:inline-block}
+.result-btns{display:flex;gap:10px;justify-content:center}
+.btn-prim{background:linear-gradient(135deg,#E65100,#F57C00);color:#fff;padding:10px 24px;font-size:13px;border-radius:8px;cursor:pointer;border:none;font-weight:600}
+.btn-sec{background:#78909c;color:#fff;padding:10px 24px;font-size:13px;border-radius:8px;cursor:pointer;border:none;font-weight:600}
+.correct-order{flex:1;display:flex;flex-direction:column;gap:5px;overflow-y:auto;padding:4px}
+.correct-item{background:#f5f5f5;border:2px dashed #e0e0e0;border-radius:8px;padding:10px 14px;font-size:12px;color:#999;text-align:center;font-weight:500}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div><h1>🛡️ Order the Hierarchy of Controls</h1><p>MACRO 2 – Prevention and Protection: from most to least effective</p></div>
+    <div class="btn-group">
+      <button class="btn-outline" onclick="resetGame()">🔄 Play Again</button>
+      <button class="btn-white" onclick="window.close()">Back to Course</button>
+    </div>
+  </div>
+  <div class="content">
+    <div id="instrPage" class="instr">
+      <h2>🎯 Objective</h2>
+      <p>The <strong>Hierarchy of Controls</strong> ranks prevention measures from most effective (eliminating the hazard entirely) to least effective (protecting the individual worker). Your task: <strong>drag the 8 measures into the correct order</strong>, from the most effective at the top to the least effective at the bottom.</p>
+      <div class="how-grid">
+        <div class="how-step"><span class="num">🔝</span>Most effective = Eliminates the hazard at the source</div>
+        <div class="how-step"><span class="num">🔽</span>Least effective = Protects only the individual</div>
+      </div>
+      <ul>
+        <li>Drag items up or down to reorder them</li>
+        <li>Position 1 = most effective measure</li>
+        <li>Click <strong>Verify Order</strong> when ready</li>
+      </ul>
+      <button class="start-btn" onclick="startGame()">▶ Start Game</button>
+    </div>
+    <div id="gamePage" class="game-wrap hidden">
+      <div class="seq-instruction">Drag to reorder: #1 = most effective → #8 = least effective</div>
+      <div class="seq-list" id="seqList"></div>
+      <button class="check-btn" id="checkBtn" onclick="checkOrder()">Verify Order ✓</button>
+    </div>
+    <div id="resultPage" class="result-page hidden">
+      <div class="result-box">
+        <div class="result-icon" id="resultIcon"></div>
+        <h2 id="resultTitle"></h2><p id="resultText"></p>
+        <div class="result-score" id="resultScore"></div>
+        <div class="result-btns">
+          <button class="btn-prim" onclick="resetGame()">🔄 Play Again</button>
+          <button class="btn-sec" onclick="window.close()">Back to Course</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+const CORRECT_ORDER=[
+  {id:1,text:'Elimination — Remove the hazard entirely (e.g. eliminate a dangerous process)'},
+  {id:2,text:'Substitution — Replace with something less hazardous (e.g. use a safer chemical)'},
+  {id:3,text:'Engineering Controls — Isolate workers from the hazard (e.g. install machine guards, ventilation)'},
+  {id:4,text:'Organisational Measures — Change work procedures (e.g. job rotation to reduce exposure time)'},
+  {id:5,text:'Administrative Controls — Training, warning signs, safety procedures and protocols'},
+  {id:6,text:'Health Surveillance — Periodic medical check-ups by the Medico Competente'},
+  {id:7,text:'Emergency Procedures — First aid plans, evacuation routes, fire response'},
+  {id:8,text:'PPE (Personal Protective Equipment) — Last resort: gloves, helmets, goggles, ear protection'},
+];
+let items=[],dragIdx=null;
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function startGame(){items=shuffle([...CORRECT_ORDER]);renderList();document.getElementById('checkBtn').disabled=false;showPage('gamePage');}
+function renderList(){const list=document.getElementById('seqList');list.innerHTML='';
+  items.forEach((item,idx)=>{const d=document.createElement('div');d.className='seq-item';d.draggable=true;d.dataset.idx=idx;
+    const badge=document.createElement('span');badge.className='num-badge';badge.textContent=idx+1;
+    const txt=document.createElement('span');txt.textContent=item.text;
+    d.appendChild(badge);d.appendChild(txt);
+    d.ondragstart=e=>{dragIdx=idx;d.classList.add('dragging');e.dataTransfer.effectAllowed='move';};
+    d.ondragend=()=>{d.classList.remove('dragging');dragIdx=null;};
+    d.ondragover=e=>{e.preventDefault();if(dragIdx===null||dragIdx===idx)return;const moved=items.splice(dragIdx,1)[0];items.splice(idx,0,moved);dragIdx=idx;renderList();};
+    list.appendChild(d);});}
+function checkOrder(){let correct=0;const els=document.querySelectorAll('.seq-item');
+  items.forEach((item,idx)=>{const el=els[idx];const isCorrect=item.id===idx+1;if(isCorrect){el.classList.add('correct-s');correct++;}else{el.classList.add('wrong-s');}el.draggable=false;el.style.cursor='default';});
+  document.getElementById('checkBtn').disabled=true;
+  setTimeout(()=>{const pct=Math.round(correct/CORRECT_ORDER.length*100);document.getElementById('resultIcon').textContent=pct>=80?'🏆':pct>=50?'👍':'💪';document.getElementById('resultTitle').textContent=pct>=80?'Perfect Hierarchy!':pct>=50?'Good Understanding!':'Review the Controls!';document.getElementById('resultText').textContent='The Hierarchy of Controls prioritises collective measures over individual ones. Elimination and substitution are always preferred. PPE is the last resort — it only protects the individual worker and depends on correct usage. Art. 15 of D.Lgs. 81/08 establishes the general principles of prevention that underpin this hierarchy.';document.getElementById('resultScore').textContent='Correct positions: '+correct+'/'+CORRECT_ORDER.length;showPage('resultPage');},1500);}
+function resetGame(){showPage('instrPage');}
+function showPage(id){['instrPage','gamePage','resultPage'].forEach(p=>document.getElementById(p).classList.add('hidden'));document.getElementById(id).classList.remove('hidden');}
+</script>
+</body>
+</html>
